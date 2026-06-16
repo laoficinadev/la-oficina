@@ -233,10 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
   }
 
-  function openMailto(name, email, message) {
+  function openMailtoUrl(name, email, message) {
     const subject = `Contacto desde La Oficina - ${name}`;
     const body = buildBody(name, email, message);
-    return `mailto:theoffice7075@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const a = document.createElement('a');
+    a.href = `mailto:theoffice7075@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   function openGmailWeb(name, email, message) {
@@ -281,34 +286,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const platform = detectPlatform();
-      let url;
 
       switch (platform) {
         case 'pc':
-          url = openGmailWeb(name, email, message);
           formStatus.textContent = 'Abriendo Gmail...';
           formStatus.className = 'form-status success';
           await new Promise(r => setTimeout(r, 400));
-          window.open(url, '_blank');
+          window.open(openGmailWeb(name, email, message), '_blank');
           submitBtn.disabled = false;
           submitBtn.textContent = 'Enviar mensaje';
           return;
         case 'android':
         case 'ios':
-          url = openMailto(name, email, message);
-          break;
-          break;
+          formStatus.textContent = 'Abriendo tu correo...';
+          formStatus.className = 'form-status success';
+          await new Promise(r => setTimeout(r, 400));
+          openMailtoUrl(name, email, message);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar mensaje';
+          return;
       }
-
-      formStatus.textContent = 'Abriendo tu correo...';
-      formStatus.className = 'form-status success';
-
-      // Small delay so the user sees the status
-      await new Promise(r => setTimeout(r, 600));
-      window.location.href = url;
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Enviar mensaje';
     });
   }
 
