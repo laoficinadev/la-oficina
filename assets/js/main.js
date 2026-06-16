@@ -252,13 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return `https://mail.google.com/mail/?${params.toString()}`;
   }
 
-  function openGmailIntent(name, email, message) {
-    const subject = encodeURIComponent(`Contacto desde La Oficina - ${name}`);
-    const body = encodeURIComponent(buildBody(name, email, message));
-    const fallback = encodeURIComponent(openGmailWeb(name, email, message));
-    return `intent://compose?to=theoffice7075@gmail.com&subject=${subject}&body=${body}#Intent;action=android.intent.action.SENDTO;package=com.google.android.gm;S.browser_fallback_url=${fallback};end`;
-  }
-
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
@@ -301,16 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.textContent = 'Enviar mensaje';
           return;
         case 'android':
-          url = openGmailIntent(name, email, message);
-          formStatus.textContent = 'Abriendo Gmail...';
-          formStatus.className = 'form-status success';
-          await new Promise(r => setTimeout(r, 400));
-          window.location.href = url;
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Enviar mensaje';
-          return;
         case 'ios':
           url = openMailto(name, email, message);
+          break;
           break;
       }
 
