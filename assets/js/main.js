@@ -222,22 +222,55 @@ document.addEventListener('DOMContentLoaded', () => {
   const formStatus = document.getElementById('formStatus');
   const submitBtn = document.getElementById('submitBtn');
 
+  function detectPlatform() {
+    const ua = navigator.userAgent;
+    if (/android/i.test(ua)) return 'android';
+    if (/iPad|iPhone|iPod/i.test(ua)) return 'ios';
+    return 'pc';
+  }
+
+  function buildBody(name, email, message) {
+    return `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
+  }
+
+  function openMailto(name, email, message) {
+    const subject = `Contacto desde La Oficina - ${name}`;
+    const body = buildBody(name, email, message);
+    return `mailto:theoffice7075@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function openGmailWeb(name, email, message) {
+    const subject = `Contacto desde La Oficina - ${name}`;
+    const body = buildBody(name, email, message);
+    const params = new URLSearchParams({
+      view: 'cm',
+      fs: '1',
+      to: 'theoffice7075@gmail.com',
+      su: subject,
+      body: body
+    });
+    return `https://mail.google.com/mail/?${params.toString()}`;
+  }
+
+  function openGmailIntent(name, email, message) {
+    const subject = `Contacto desde La Oficina - ${name}`;
+    const body = buildBody(name, email, message);
+    return `intent://compose?to=theoffice7075@gmail.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}#Intent;action=android.intent.action.SENDTO;package=com.google.android.gm;end`;
+  }
+
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando...';
+      submitBtn.textContent = 'Redirigiendo...';
       formStatus.textContent = '';
       formStatus.className = 'form-status';
 
-      const formData = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        message: form.message.value.trim()
-      };
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
 
-      // Basic validation
-      if (!formData.name || !formData.email || !formData.message) {
+      if (!name || !email || !message) {
         formStatus.textContent = 'Por favor completa todos los campos.';
         formStatus.className = 'form-status error';
         submitBtn.disabled = false;
@@ -245,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         formStatus.textContent = 'Por favor ingresa un correo válido.';
         formStatus.className = 'form-status error';
         submitBtn.disabled = false;
@@ -253,19 +286,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Simulate send (placeholder — connect to backend later)
-      try {
-        await new Promise(resolve => setTimeout(resolve, 1200));
-        formStatus.textContent = '¡Mensaje enviado con éxito! Te responderemos pronto.';
-        formStatus.className = 'form-status success';
-        form.reset();
-      } catch {
-        formStatus.textContent = 'Hubo un error. Intenta de nuevo más tarde.';
-        formStatus.className = 'form-status error';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar mensaje';
+      const platform = detectPlatform();
+      let url;
+
+      switch (platform) {
+        case 'android':
+          url = openGmailIntent(name, email, message);
+          break;
+        case 'ios':
+          url = openMailto(name, email, message);
+          break;
+        default:
+          url = openGmailWeb(name, email, message);
       }
+
+      formStatus.textContent = 'Abriendo tu correo...';
+      formStatus.className = 'form-status success';
+
+      // Small delay so the user sees the status
+      await new Promise(r => setTimeout(r, 600));
+      window.location.href = url;
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar mensaje';
     });
   }
 
