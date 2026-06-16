@@ -252,10 +252,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return `https://mail.google.com/mail/?${params.toString()}`;
   }
 
-  function openGmailApp(name, email, message) {
+  function openGmailIntent(name, email, message) {
     const subject = encodeURIComponent(`Contacto desde La Oficina - ${name}`);
     const body = encodeURIComponent(buildBody(name, email, message));
-    return `googlegmail://co?to=theoffice7075@gmail.com&subject=${subject}&body=${body}`;
+    const fallback = encodeURIComponent(openGmailWeb(name, email, message));
+    return `intent://compose?to=theoffice7075@gmail.com&subject=${subject}&body=${body}#Intent;action=android.intent.action.SENDTO;package=com.google.android.gm;S.browser_fallback_url=${fallback};end`;
   }
 
   if (form) {
@@ -300,18 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.textContent = 'Enviar mensaje';
           return;
         case 'android':
-          url = openGmailApp(name, email, message);
+          url = openGmailIntent(name, email, message);
           formStatus.textContent = 'Abriendo Gmail...';
           formStatus.className = 'form-status success';
           await new Promise(r => setTimeout(r, 400));
           window.location.href = url;
-          // Fallback a web si la app no abre
-          const fallbackTimer = setTimeout(() => {
-            window.location.href = openGmailWeb(name, email, message);
-          }, 1500);
-          document.addEventListener('visibilitychange', () => {
-            if (document.hidden) clearTimeout(fallbackTimer);
-          }, { once: true });
           submitBtn.disabled = false;
           submitBtn.textContent = 'Enviar mensaje';
           return;
