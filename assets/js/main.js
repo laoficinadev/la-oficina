@@ -252,12 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return `https://mail.google.com/mail/?${params.toString()}`;
   }
 
-  function openGmailIntent(name, email, message) {
-    const subject = `Contacto desde La Oficina - ${name}`;
-    const body = buildBody(name, email, message);
-    return `intent://compose?to=theoffice7075@gmail.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}#Intent;action=android.intent.action.SENDTO;package=com.google.android.gm;end`;
-  }
-
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
@@ -291,13 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       switch (platform) {
         case 'android':
-          url = openGmailIntent(name, email, message);
+        case 'pc':
+          url = openGmailWeb(name, email, message);
           break;
         case 'ios':
           url = openMailto(name, email, message);
           break;
-        default:
-          url = openGmailWeb(name, email, message);
       }
 
       formStatus.textContent = 'Abriendo tu correo...';
