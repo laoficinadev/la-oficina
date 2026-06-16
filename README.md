@@ -16,5 +16,5 @@ Portafolio oficial de **La Oficina**, agencia de desarrollo web, aplicaciones, a
 
 ## Contacto
 
-- Email: contacto@laoficina.dev
+- Email: theoffice7075@gmail.com
 - GitHub: https://github.com/laoficina
