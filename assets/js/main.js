@@ -284,8 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
       let url;
 
       switch (platform) {
-        case 'android':
         case 'pc':
+          url = openGmailWeb(name, email, message);
+          formStatus.textContent = 'Abriendo Gmail...';
+          formStatus.className = 'form-status success';
+          await new Promise(r => setTimeout(r, 400));
+          window.open(url, '_blank');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar mensaje';
+          return;
+        case 'android':
           url = openGmailWeb(name, email, message);
           break;
         case 'ios':
