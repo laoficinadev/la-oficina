@@ -5,6 +5,35 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  // ---- PRELOADER ----
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      preloader.classList.add('hidden');
+    }
+  });
+
+  // ---- THEME TOGGLE ----
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  function setTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    html.setAttribute('data-theme', savedTheme);
+  }
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      setTheme(current === 'light' ? 'dark' : 'light');
+    });
+  }
+
   // ---- NAVBAR SCROLL EFFECT ----
   const navbar = document.getElementById('navbar');
   let lastScroll = 0;
