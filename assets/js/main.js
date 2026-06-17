@@ -7,50 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloader) preloader.classList.add('hidden');
   });
 
-  // ---- THEME TOGGLE ----
-  const themeToggle = document.getElementById('themeToggle');
-  const html = document.documentElement;
-
-  function setTheme(theme) {
-    html.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    updateThemeLabel(theme);
-    updateThemeAriaLabel(theme);
-  }
-
-  function updateThemeLabel(theme) {
-    const label = document.getElementById('themeLabel');
-    if (!label) return;
-    const key = theme === 'light' ? 'theme.darkLabel' : 'theme.lightLabel';
-    if (langData[key]) {
-      label.textContent = langData[key];
-    } else {
-      label.textContent = theme === 'light' ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro';
-    }
-  }
-
-  function updateThemeAriaLabel(theme) {
-    if (!themeToggle) return;
-    themeToggle.setAttribute('aria-label',
-      currentLang === 'en'
-        ? (theme === 'light' ? 'Dark mode' : 'Light mode')
-        : (theme === 'light' ? 'Modo oscuro' : 'Modo claro'));
-  }
-
-  let langData = {};
-  const savedTheme = localStorage.getItem('theme');
-  const initialTheme = savedTheme || 'dark';
-  html.setAttribute('data-theme', savedTheme || 'dark');
-  updateThemeLabel(initialTheme);
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const current = html.getAttribute('data-theme');
-      setTheme(current === 'light' ? 'dark' : 'light');
-    });
-  }
-
   // ---- LANGUAGE SWITCHER ----
+  let langData = {};
   let currentLang = localStorage.getItem('lang') || 'es';
 
   async function loadLang(lang) {
@@ -75,8 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const btn = document.getElementById('langToggle');
     if (btn) btn.textContent = currentLang === 'en' ? 'EN' : 'ES';
-    updateThemeLabel(html.getAttribute('data-theme'));
-    updateThemeAriaLabel(html.getAttribute('data-theme'));
   }
 
   const langToggle = document.getElementById('langToggle');

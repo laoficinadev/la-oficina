@@ -54,28 +54,6 @@ ul { list-style: none; }
   --radius-lg: 20px;
 }
 
-[data-theme="light"] {
-  --verde: #6B8E23;
-  --verde-oscuro: #556B2F;
-  --verde-glow: rgba(107, 142, 35, 0.15);
-  --azul: #1565C0;
-  --azul-oscuro: #0D47A1;
-  --azul-glow: rgba(21, 101, 192, 0.12);
-  --negro: #f5f5f5;
-  --gris-900: #ffffff;
-  --gris-800: #f0f0f0;
-  --gris-700: #e0e0e0;
-  --gris-600: #cccccc;
-  --gris-400: #888888;
-  --gris-300: #666666;
-  --gris-200: #444444;
-  --surface: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --text: #111111;
-  --text-secondary: #666666;
-  --overlay: rgba(255, 255, 255, 0.8);
-}
-
 /* ---- PRELOADER ---- */
 .preloader {
   position: fixed;
@@ -158,17 +136,9 @@ ul { list-style: none; }
   transition: var(--transition);
 }
 
-[data-theme="light"] .navbar {
-  --navbar-bg: rgba(245, 245, 245, 0.9);
-}
-
 .navbar.scrolled {
   background: var(--navbar-scrolled-bg, rgba(10, 10, 10, 0.95));
   border-bottom-color: rgba(139, 195, 74, 0.2);
-}
-
-[data-theme="light"] .navbar.scrolled {
-  --navbar-scrolled-bg: rgba(245, 245, 245, 0.95);
 }
 
 .nav-container {
@@ -209,46 +179,6 @@ ul { list-style: none; }
 
 .logo-accent {
   color: var(--verde);
-}
-
-/* --- Theme Toggle --- */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--gris-800);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  color: var(--gris-300);
-  padding: 8px;
-  transition: var(--transition);
-  margin-right: 4px;
-}
-
-.theme-toggle:hover {
-  color: var(--verde);
-  border-color: var(--verde);
-  box-shadow: 0 0 16px var(--verde-glow);
-}
-
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-}
-
-.theme-toggle .moon-icon {
-  display: none;
-}
-
-[data-theme="light"] .theme-toggle .sun-icon {
-  display: none;
-}
-
-[data-theme="light"] .theme-toggle .moon-icon {
-  display: block;
 }
 
 /* --- Action Labels --- */
@@ -697,10 +627,6 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-[data-theme="light"] .project-image {
-  background: var(--gris-600);
 }
 
 .project-placeholder {
