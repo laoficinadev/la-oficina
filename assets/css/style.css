@@ -251,6 +251,21 @@ ul { list-style: none; }
   display: block;
 }
 
+/* --- Action Labels --- */
+.nav-action-label {
+  font-size: 0.7rem;
+  color: var(--gris-400);
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .nav-action-label {
+    display: none;
+  }
+}
+
 /* --- Lang Toggle --- */
 .lang-toggle {
   display: flex;
@@ -1164,5 +1179,6 @@ ul { list-style: none; }
     padding: 24px;
   }
 }
+
 
 

@@ -52,5 +52,6 @@
   "footer.social.title": "Follow us",
   "footer.copyright": "© 2026 La Oficina. All rights reserved.",
   "theme.light": "Light mode",
-  "theme.dark": "Dark mode"
+  "theme.dark": "Dark mode",`r`n  "nav.langLabel": "Change Language",`r`n  "theme.lightLabel": "Switch to Light Mode",`r`n  "theme.darkLabel": "Switch to Dark Mode"
 }
+

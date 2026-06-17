@@ -14,7 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
   function setTheme(theme) {
     html.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    updateThemeLabel(theme);
     updateThemeAriaLabel(theme);
+  }
+
+  function updateThemeLabel(theme) {
+    const label = document.getElementById('themeLabel');
+    if (!label) return;
+    const key = theme === 'light' ? 'theme.darkLabel' : 'theme.lightLabel';
+    if (langData[key]) {
+      label.textContent = langData[key];
+    } else {
+      label.textContent = theme === 'light' ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro';
+    }
   }
 
   function updateThemeAriaLabel(theme) {
@@ -26,7 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) html.setAttribute('data-theme', savedTheme);
+  const initialTheme = savedTheme || 'dark';
+  html.setAttribute('data-theme', savedTheme || 'dark');
+  updateThemeLabel(initialTheme);
 
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
@@ -61,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const btn = document.getElementById('langToggle');
     if (btn) btn.textContent = currentLang === 'en' ? 'EN' : 'ES';
+    updateThemeLabel(html.getAttribute('data-theme'));
     updateThemeAriaLabel(html.getAttribute('data-theme'));
   }
 
@@ -464,4 +479,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('🚀 La Oficina — Portfolio loaded');
 });
+
+
+
+
+
 
