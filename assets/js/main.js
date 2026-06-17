@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : (theme === 'light' ? 'Modo oscuro' : 'Modo claro'));
   }
 
+  let langData = {};
   const savedTheme = localStorage.getItem('theme');
   const initialTheme = savedTheme || 'dark';
   html.setAttribute('data-theme', savedTheme || 'dark');
@@ -51,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---- LANGUAGE SWITCHER ----
   let currentLang = localStorage.getItem('lang') || 'es';
-  let langData = {};
 
   async function loadLang(lang) {
     try {
