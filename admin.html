@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — La Oficina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+    .admin-header { background: #111; border-bottom: 1px solid rgba(139,195,74,0.15); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .admin-header h1 { font-size: 1.1rem; font-weight: 700; color: #8BC34A; letter-spacing: 1px; }
+    .admin-header .admin-nav { display: flex; gap: 12px; align-items: center; }
+    .admin-header a { color: #aaa; font-size: 0.8rem; text-decoration: none; transition: 0.2s; }
+    .admin-header a:hover { color: #8BC34A; }
+    .btn-admin-logout { background: none; border: 1px solid #333; color: #888; padding: 6px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.75rem; transition: 0.2s; }
+    .btn-admin-logout:hover { border-color: #8BC34A; color: #8BC34A; }
+
+    /* Login */
+    #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+    .login-box { background: #111; border: 1px solid #222; border-radius: 20px; padding: 40px; text-align: center; max-width: 360px; width: 100%; }
+    .login-box h2 { font-size: 1.2rem; margin-bottom: 8px; color: #8BC34A; }
+    .login-box p { font-size: 0.8rem; color: #888; margin-bottom: 24px; }
+    .login-box input { width: 100%; padding: 12px 16px; background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; font-family: inherit; font-size: 0.9rem; outline: none; margin-bottom: 12px; }
+    .login-box input:focus { border-color: #8BC34A; }
+    .login-box .error { color: #f44336; font-size: 0.8rem; margin-bottom: 12px; }
+    .login-box button { width: 100%; padding: 12px; background: #8BC34A; border: none; border-radius: 10px; color: #000; font-weight: 700; font-family: inherit; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+    .login-box button:hover { background: #9CCC65; }
+
+    /* Admin Panel */
+    #adminPanel { display: none; padding: 24px; max-width: 960px; margin: 0 auto; }
+    .admin-stats { display: flex; gap: 16px; margin-bottom: 24px; }
+    .admin-stat-card { background: #111; border: 1px solid #222; border-radius: 14px; padding: 20px 24px; flex: 1; text-align: center; }
+    .admin-stat-card span { display: block; font-size: 2rem; font-weight: 800; color: #8BC34A; }
+    .admin-stat-card label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+    .admin-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .btn-admin { padding: 10px 20px; border-radius: 10px; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; }
+    .btn-primary-admin { background: #8BC34A; color: #000; }
+    .btn-primary-admin:hover { background: #9CCC65; }
+    .btn-secondary-admin { background: #222; color: #ccc; border: 1px solid #333; }
+    .btn-secondary-admin:hover { border-color: #8BC34A; color: #8BC34A; }
+    .btn-danger-admin { background: #d32f2f; color: #fff; }
+    .btn-danger-admin:hover { background: #e53935; }
+    .btn-edit { background: #2196F3; color: #fff; padding: 6px 14px; font-size: 0.75rem; }
+    .btn-edit:hover { background: #42A5F5; }
+    .btn-delete { background: #d32f2f; color: #fff; padding: 6px 14px; font-size: 0.75rem; }
+    .btn-delete:hover { background: #e53935; }
+    .btn-sm { padding: 6px 14px; font-size: 0.75rem; }
+
+    .admin-projects-list { background: #111; border: 1px solid #222; border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+    .admin-project-item { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #222; transition: 0.2s; }
+    .admin-project-item:last-child { border-bottom: none; }
+    .admin-project-item:hover { background: #1a1a1a; }
+    .admin-project-order { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .admin-project-order button { background: none; border: none; color: #555; cursor: pointer; font-size: 0.7rem; padding: 2px; line-height: 1; transition: 0.2s; }
+    .admin-project-order button:hover:not(:disabled) { color: #8BC34A; }
+    .admin-project-order button:disabled { opacity: 0.3; cursor: default; }
+    .admin-project-order span { font-size: 0.75rem; color: #666; font-weight: 600; }
+    .admin-project-info { flex: 1; overflow: hidden; }
+    .admin-project-info strong { display: block; font-size: 0.9rem; margin-bottom: 2px; }
+    .admin-project-tech { font-size: 0.75rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .admin-project-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .admin-empty { padding: 32px; text-align: center; color: #666; font-size: 0.9rem; }
+
+    /* Form */
+    #formSection { display: none; background: #111; border: 1px solid #333; border-radius: 14px; padding: 28px; margin-bottom: 24px; }
+    #formSection h3 { font-size: 1rem; margin-bottom: 20px; color: #8BC34A; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group-full { grid-column: 1 / -1; }
+    .admin-form-group { margin-bottom: 0; }
+    .admin-form-group label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .admin-form-group input,
+    .admin-form-group textarea { width: 100%; padding: 10px 14px; background: #222; border: 1px solid #333; border-radius: 8px; color: #fff; font-family: inherit; font-size: 0.85rem; outline: none; transition: 0.2s; }
+    .admin-form-group input:focus,
+    .admin-form-group textarea:focus { border-color: #8BC34A; }
+    .admin-form-group textarea { resize: vertical; min-height: 80px; }
+    .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .admin-import { display: flex; align-items: center; gap: 10px; }
+    .admin-import input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <h2>🔐 Admin</h2>
+      <p>Ingresa la contraseña para gestionar los proyectos.</p>
+      <input type="password" id="adminPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')authenticate()" />
+      <div class="error" id="loginError"></div>
+      <button onclick="authenticate()">Acceder</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel">
+    <div class="admin-header" style="margin:-24px -24px 24px;border-radius:0;">
+      <h1>⚙️ Panel de Administración</h1>
+      <div class="admin-nav">
+        <a href="index.html" target="_blank">Ver sitio</a>
+        <button class="btn-admin-logout" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <div class="admin-stats">
+      <div class="admin-stat-card">
+        <span id="projectCount">0</span>
+        <label>Proyectos</label>
+      </div>
+    </div>
+
+    <div class="admin-toolbar">
+      <button class="btn-admin btn-primary-admin" onclick="showForm(null)">+ Nuevo proyecto</button>
+      <button class="btn-admin btn-secondary-admin" onclick="exportProjects()">Exportar JSON</button>
+      <label class="btn-admin btn-secondary-admin" style="cursor:pointer;">
+        Importar JSON
+        <input type="file" accept=".json" onchange="importProjects()" id="importFile" />
+      </label>
+      <button class="btn-admin btn-danger-admin" onclick="resetDefaults()">Restaurar defaults</button>
+    </div>
+
+    <div id="formSection">
+      <h3 id="formTitle">Nuevo proyecto</h3>
+      <div class="form-grid">
+        <div class="admin-form-group">
+          <label>Título (ES)</label>
+          <input type="text" id="projectTitle" placeholder="Ej: Reproductor Multimedia" />
+        </div>
+        <div class="admin-form-group">
+          <label>Título (EN)</label>
+          <input type="text" id="projectTitleEn" placeholder="Ej: Media Player" />
+        </div>
+        <div class="admin-form-group form-group-full">
+          <label>Descripción (ES)</label>
+          <textarea id="projectDesc" placeholder="Descripción en español"></textarea>
+        </div>
+        <div class="admin-form-group form-group-full">
+          <label>Descripción (EN)</label>
+          <textarea id="projectDescEn" placeholder="Description in English"></textarea>
+        </div>
+        <div class="admin-form-group form-group-full">
+          <label>Tecnologías (separadas por coma)</label>
+          <input type="text" id="projectTech" placeholder="Ej: HTML, CSS, JavaScript, React" />
+        </div>
+        <div class="admin-form-group form-group-full">
+          <label>Link del proyecto</label>
+          <input type="url" id="projectLink" placeholder="https://..." />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-admin btn-primary-admin" onclick="saveForm()">Guardar</button>
+        <button class="btn-admin btn-secondary-admin" onclick="cancelForm()">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="admin-projects-list" id="projectsList">
+      <div class="admin-empty">Cargando...</div>
+    </div>
+  </div>
+
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

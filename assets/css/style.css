@@ -252,6 +252,33 @@ ul { list-style: none; }
   display: block;
 }
 
+/* --- Lang Toggle --- */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--gris-800);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--gris-300);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0;
+  transition: var(--transition);
+  margin-right: 4px;
+  letter-spacing: 0.5px;
+}
+
+.lang-toggle:hover {
+  color: var(--verde);
+  border-color: var(--verde);
+  box-shadow: 0 0 16px var(--verde-glow);
+}
+
 /* --- Nav Links --- */
 .nav-links {
   display: flex;
@@ -337,7 +364,7 @@ ul { list-style: none; }
   padding: 120px 0 80px;
 }
 
-#particlesCanvas {
+#three-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -345,6 +372,10 @@ ul { list-style: none; }
   height: 100%;
   z-index: 0;
   pointer-events: none;
+}
+
+#three-container canvas {
+  display: block;
 }
 
 .hero::before {

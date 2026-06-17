@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Oficina — Desarrollo y Tecnología</title>
+  <title data-i18n="site.title">La Oficina — Desarrollo y Tecnología</title>
   <meta name="description" content="La Oficina — Desarrollo web, aplicaciones, automatización y soporte para empresas." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KK5NLVJHXP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -21,7 +20,6 @@
 </head>
 <body>
 
-  <!-- ===== PRELOADER ===== -->
   <div class="preloader" id="preloader">
     <div class="preloader-content">
       <div class="preloader-icon">
@@ -37,7 +35,6 @@
     </div>
   </div>
 
-  <!-- ===== NAVBAR ===== -->
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
       <a href="#hero" class="logo">
@@ -62,45 +59,44 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
+      <button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma">ES</button>
       <button class="menu-toggle" id="menuToggle" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#hero" class="nav-link active">Inicio</a></li>
-        <li><a href="#servicios" class="nav-link">Servicios</a></li>
-        <li><a href="#proyectos" class="nav-link">Proyectos</a></li>
-        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+        <li><a href="#hero" class="nav-link active" data-i18n="nav.inicio">Inicio</a></li>
+        <li><a href="#servicios" class="nav-link" data-i18n="nav.servicios">Servicios</a></li>
+        <li><a href="#proyectos" class="nav-link" data-i18n="nav.proyectos">Proyectos</a></li>
+        <li><a href="#contacto" class="nav-link" data-i18n="nav.contacto">Contacto</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ===== HERO ===== -->
   <section class="hero" id="hero">
-    <canvas id="particlesCanvas"></canvas>
+    <div id="three-container"></div>
     <div class="container hero-content">
-      <div class="hero-badge">Agencia Digital</div>
+      <div class="hero-badge" data-i18n="hero.badge">Agencia Digital</div>
       <h1 class="hero-title">
-        <span class="reveal-text">Construimos</span>
-        <span class="reveal-text hero-highlight">el futuro</span>
-        <span class="reveal-text">de tu negocio</span>
+        <span class="reveal-text" data-i18n="hero.line1">Construimos</span>
+        <span class="reveal-text hero-highlight" data-i18n="hero.line2">el futuro</span>
+        <span class="reveal-text" data-i18n="hero.line3">de tu negocio</span>
       </h1>
-      <p class="hero-subtitle reveal-text">
+      <p class="hero-subtitle reveal-text" data-i18n="hero.subtitle">
         Desarrollo web, aplicaciones y automatización para empresas que quieren crecer.
       </p>
       <div class="hero-actions">
-        <a href="#servicios" class="btn btn-primary">Ver servicios</a>
-        <a href="#contacto" class="btn btn-secondary">Contáctanos</a>
+        <a href="#servicios" class="btn btn-primary" data-i18n="hero.btn1">Ver servicios</a>
+        <a href="#contacto" class="btn btn-secondary" data-i18n="hero.btn2">Contáctanos</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== SERVICIOS ===== -->
   <section class="section section-dark" id="servicios">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-tag">Servicios</span>
-        <h2 class="section-title">Lo que <span class="text-accent">hacemos</span></h2>
-        <p class="section-desc">
+        <span class="section-tag" data-i18n="services.tag">Servicios</span>
+        <h2 class="section-title"><span data-i18n="services.title">Lo que</span> <span class="text-accent" data-i18n="services.titleAccent">hacemos</span></h2>
+        <p class="section-desc" data-i18n="services.desc">
           Transformamos tus ideas en soluciones digitales potentes y escalables.
         </p>
       </div>
@@ -116,8 +112,8 @@
               <line x1="6" y1="38" x2="42" y2="38" stroke="currentColor" stroke-width="3"/>
             </svg>
           </div>
-          <h3 class="service-title">Desarrollo Web</h3>
-          <p class="service-desc">
+          <h3 class="service-title" data-i18n="service1.title">Desarrollo Web</h3>
+          <p class="service-desc" data-i18n="service1.desc">
             Sitios web, landing pages y aplicaciones web modernas con las mejores tecnologías del mercado.
           </p>
         </div>
@@ -132,8 +128,8 @@
               <path d="M16 32 L24 32" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             </svg>
           </div>
-          <h3 class="service-title">Creación de Apps</h3>
-          <p class="service-desc">
+          <h3 class="service-title" data-i18n="service2.title">Creación de Apps</h3>
+          <p class="service-desc" data-i18n="service2.desc">
             Aplicaciones web progresivas y nativas que llevan tu negocio al bolsillo de tus clientes.
           </p>
         </div>
@@ -145,8 +141,8 @@
               <path d="M16 24 L22 30 L32 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3 class="service-title">Soporte Técnico</h3>
-          <p class="service-desc">
+          <h3 class="service-title" data-i18n="service3.title">Soporte Técnico</h3>
+          <p class="service-desc" data-i18n="service3.desc">
             Mantenimiento, actualización y soporte continuo para que tu infraestructura digital funcione sin fallos.
           </p>
         </div>
@@ -162,8 +158,8 @@
               <path d="M24 8 L32 16 L32 20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             </svg>
           </div>
-          <h3 class="service-title">Automatización</h3>
-          <p class="service-desc">
+          <h3 class="service-title" data-i18n="service4.title">Automatización</h3>
+          <p class="service-desc" data-i18n="service4.desc">
             Procesos automatizados para empresas que buscan eficiencia: tareas repetitivas, flujos de datos e integraciones.
           </p>
         </div>
@@ -171,127 +167,25 @@
     </div>
   </section>
 
-  <!-- ===== PROYECTOS ===== -->
   <section class="section" id="proyectos">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-tag">Portafolio</span>
-        <h2 class="section-title">Nuestros <span class="text-accent">Proyectos</span></h2>
-        <p class="section-desc">
+        <span class="section-tag" data-i18n="projects.tag">Portafolio</span>
+        <h2 class="section-title"><span data-i18n="projects.title">Nuestros</span> <span class="text-accent" data-i18n="projects.titleAccent">Proyectos</span></h2>
+        <p class="section-desc" data-i18n="projects.desc">
           Cada línea de código cuenta una historia. Estos son los proyectos que hemos construido.
         </p>
       </div>
-
-      <div class="projects-grid">
-        <!-- Proyecto 1: Reproductor -->
-        <article class="project-card reveal">
-          <div class="project-image">
-            <div class="project-placeholder">
-              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3"/>
-                <polygon points="35,25 35,55 58,40" fill="currentColor"/>
-              </svg>
-            </div>
-            <div class="project-overlay">
-              <span>Próximamente</span>
-            </div>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Reproductor Multimedia</h3>
-            <p class="project-desc">
-              Reproductor web con soporte para múltiples formatos, listas dinámicas y control de reproducción.
-            </p>
-            <div class="project-tech">
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>JavaScript</span>
-              <span>PHP</span>
-              <span>Python</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="btn btn-sm">Ver proyecto</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Proyecto 2: Red Social -->
-        <article class="project-card reveal">
-          <div class="project-image">
-            <div class="project-placeholder">
-              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="28" cy="28" r="10" stroke="currentColor" stroke-width="3"/>
-                <circle cx="55" cy="25" r="8" stroke="currentColor" stroke-width="3"/>
-                <circle cx="45" cy="50" r="9" stroke="currentColor" stroke-width="3"/>
-                <line x1="36" y1="34" x2="48" y2="44" stroke="currentColor" stroke-width="3"/>
-                <line x1="50" y1="32" x2="42" y2="42" stroke="currentColor" stroke-width="3"/>
-              </svg>
-            </div>
-            <div class="project-overlay">
-              <span>Próximamente</span>
-            </div>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Red Social</h3>
-            <p class="project-desc">
-              Plataforma social con autenticación, publicaciones con imágenes, perfiles de usuario y feed en tiempo real.
-            </p>
-            <div class="project-tech">
-              <span>Next.js</span>
-              <span>React</span>
-              <span>TypeScript</span>
-              <span>Supabase</span>
-              <span>Tailwind</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="btn btn-sm">Ver proyecto</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Proyecto 3: Viajes de Camiones -->
-        <article class="project-card reveal">
-          <div class="project-image">
-            <div class="project-placeholder">
-              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="10" y="35" width="45" height="25" rx="4" stroke="currentColor" stroke-width="3"/>
-                <circle cx="25" cy="65" r="8" stroke="currentColor" stroke-width="3"/>
-                <circle cx="52" cy="65" r="8" stroke="currentColor" stroke-width="3"/>
-                <rect x="50" y="25" width="22" height="35" rx="4" stroke="currentColor" stroke-width="3"/>
-                <line x1="10" y1="45" x2="5" y2="45" stroke="currentColor" stroke-width="3"/>
-              </svg>
-            </div>
-            <div class="project-overlay">
-              <span>Próximamente</span>
-            </div>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Viajes de Camiones</h3>
-            <p class="project-desc">
-              Plataforma de contratación de viajes de carga con seguimiento en tiempo real y cotización instantánea.
-            </p>
-            <div class="project-tech">
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>JavaScript</span>
-              <span>PHP</span>
-              <span>SQL</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="btn btn-sm">Ver proyecto</a>
-            </div>
-          </div>
-        </article>
-      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
     </div>
   </section>
 
-  <!-- ===== CONTACTO ===== -->
   <section class="section" id="contacto">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-tag">Contacto</span>
-        <h2 class="section-title">Trabajemos <span class="text-accent">juntos</span></h2>
-        <p class="section-desc">
+        <span class="section-tag" data-i18n="contact.tag">Contacto</span>
+        <h2 class="section-title"><span data-i18n="contact.title">Trabajemos</span> <span class="text-accent" data-i18n="contact.titleAccent">juntos</span></h2>
+        <p class="section-desc" data-i18n="contact.desc">
           Cuéntanos sobre tu proyecto y te responderemos en menos de 24 horas.
         </p>
       </div>
@@ -299,18 +193,18 @@
       <div class="contact-grid">
         <form class="contact-form reveal" id="contactForm">
           <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" id="name" name="name" required placeholder="Tu nombre" />
+            <label for="name" data-i18n="contact.form.name">Nombre</label>
+            <input type="text" id="name" name="name" required data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre" />
           </div>
           <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input type="email" id="email" name="email" required placeholder="tu@correo.com" />
+            <label for="email" data-i18n="contact.form.email">Correo electrónico</label>
+            <input type="email" id="email" name="email" required data-i18n-placeholder="contact.form.emailPlaceholder" placeholder="tu@correo.com" />
           </div>
           <div class="form-group">
-            <label for="message">Mensaje</label>
-            <textarea id="message" name="message" rows="5" required placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+            <label for="message" data-i18n="contact.form.message">Mensaje</label>
+            <textarea id="message" name="message" rows="5" required data-i18n-placeholder="contact.form.messagePlaceholder" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn" data-i18n="contact.form.submit">
             Enviar mensaje
           </button>
           <p class="form-status" id="formStatus"></p>
@@ -325,7 +219,7 @@
               </svg>
             </div>
             <div>
-              <h4>Correo electrónico</h4>
+              <h4 data-i18n="contact.email.label">Correo electrónico</h4>
               <a href="mailto:theoffice7075@gmail.com">theoffice7075@gmail.com</a>
             </div>
           </div>
@@ -336,7 +230,7 @@
               </svg>
             </div>
             <div>
-              <h4>GitHub</h4>
+              <h4 data-i18n="contact.github.label">GitHub</h4>
               <a href="https://github.com/laoficina" target="_blank" rel="noopener">github.com/laoficina</a>
             </div>
           </div>
@@ -348,8 +242,8 @@
               </svg>
             </div>
             <div>
-              <h4>Ubicación</h4>
-              <p>Disponible en toda Latinoamérica</p>
+              <h4 data-i18n="contact.location.label">Ubicación</h4>
+              <p data-i18n="contact.location.value">Disponible en toda Latinoamérica</p>
             </div>
           </div>
         </div>
@@ -357,7 +251,6 @@
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">
@@ -371,21 +264,21 @@
           </div>
           <span class="logo-text">LA<span class="logo-accent"> OFICINA</span></span>
         </div>
-        <p class="footer-desc">
+        <p class="footer-desc" data-i18n="footer.desc">
           Transformando ideas en soluciones digitales.
         </p>
       </div>
       <div class="footer-links">
-        <h4>Navegación</h4>
+        <h4 data-i18n="footer.nav.title">Navegación</h4>
         <ul>
-          <li><a href="#hero">Inicio</a></li>
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#proyectos">Proyectos</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#hero" data-i18n="nav.inicio">Inicio</a></li>
+          <li><a href="#servicios" data-i18n="nav.servicios">Servicios</a></li>
+          <li><a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a></li>
+          <li><a href="#contacto" data-i18n="nav.contacto">Contacto</a></li>
         </ul>
       </div>
       <div class="footer-social">
-        <h4>Síguenos</h4>
+        <h4 data-i18n="footer.social.title">Síguenos</h4>
         <div class="social-icons">
           <a href="#" target="_blank" rel="noopener" aria-label="GitHub">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -407,11 +300,12 @@
     </div>
     <div class="footer-bottom">
       <div class="container">
-        <p>&copy; 2026 La Oficina. Todos los derechos reservados.</p>
+        <p data-i18n="footer.copyright">&copy; 2026 La Oficina. Todos los derechos reservados.</p>
       </div>
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

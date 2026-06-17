@@ -1,16 +1,10 @@
-/* =============================================
-   LA OFICINA — Main JavaScript
-   ============================================= */
-
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   // ---- PRELOADER ----
   window.addEventListener('load', () => {
     const preloader = document.getElementById('preloader');
-    if (preloader) {
-      preloader.classList.add('hidden');
-    }
+    if (preloader) preloader.classList.add('hidden');
   });
 
   // ---- THEME TOGGLE ----
@@ -20,12 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
   function setTheme(theme) {
     html.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    updateThemeAriaLabel(theme);
+  }
+
+  function updateThemeAriaLabel(theme) {
+    if (!themeToggle) return;
+    themeToggle.setAttribute('aria-label',
+      currentLang === 'en'
+        ? (theme === 'light' ? 'Dark mode' : 'Light mode')
+        : (theme === 'light' ? 'Modo oscuro' : 'Modo claro'));
   }
 
   const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    html.setAttribute('data-theme', savedTheme);
-  }
+  if (savedTheme) html.setAttribute('data-theme', savedTheme);
 
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
@@ -34,18 +35,134 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---- NAVBAR SCROLL EFFECT ----
+  // ---- LANGUAGE SWITCHER ----
+  let currentLang = localStorage.getItem('lang') || 'es';
+  let langData = {};
+
+  async function loadLang(lang) {
+    try {
+      const res = await fetch(`assets/lang/${lang}.json`);
+      langData = await res.json();
+      applyLang();
+      renderProjects();
+    } catch (e) {
+      console.warn('Failed to load language:', lang);
+    }
+  }
+
+  function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (langData[key]) el.textContent = langData[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (langData[key]) el.setAttribute('placeholder', langData[key]);
+    });
+    const btn = document.getElementById('langToggle');
+    if (btn) btn.textContent = currentLang === 'en' ? 'EN' : 'ES';
+    updateThemeAriaLabel(html.getAttribute('data-theme'));
+  }
+
+  const langToggle = document.getElementById('langToggle');
+  if (langToggle) {
+    langToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      localStorage.setItem('lang', currentLang);
+      loadLang(currentLang);
+    });
+  }
+
+  // ---- DEFAULT PROJECTS ----
+  const DEFAULT_PROJECTS = [
+    {
+      id: 'proj-1',
+      title: 'Reproductor Multimedia',
+      titleEn: 'Media Player',
+      desc: 'Reproductor web con soporte para múltiples formatos, listas dinámicas y control de reproducción.',
+      descEn: 'Web player with multi-format support, dynamic playlists and playback control.',
+      tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Python'],
+      link: '#',
+      icon: 'play'
+    },
+    {
+      id: 'proj-2',
+      title: 'Red Social',
+      titleEn: 'Social Network',
+      desc: 'Plataforma social con autenticación, publicaciones con imágenes, perfiles de usuario y feed en tiempo real.',
+      descEn: 'Social platform with authentication, image posts, user profiles and real-time feed.',
+      tech: ['Next.js', 'React', 'TypeScript', 'Supabase', 'Tailwind'],
+      link: '#',
+      icon: 'network'
+    },
+    {
+      id: 'proj-3',
+      title: 'Viajes de Camiones',
+      titleEn: 'Truck Trips',
+      desc: 'Plataforma de contratación de viajes de carga con seguimiento en tiempo real y cotización instantánea.',
+      descEn: 'Cargo trip booking platform with real-time tracking and instant quotes.',
+      tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
+      link: '#',
+      icon: 'truck'
+    }
+  ];
+
+  function getProjects() {
+    try {
+      const stored = localStorage.getItem('projects');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch (e) {}
+    return DEFAULT_PROJECTS;
+  }
+
+  function renderProjects() {
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    const projects = getProjects();
+    const isEn = currentLang === 'en';
+
+    grid.innerHTML = projects.map(p => `
+      <article class="project-card reveal">
+        <div class="project-image">
+          <div class="project-placeholder">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3"/>
+              <polygon points="35,25 35,55 58,40" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="project-overlay">
+            <span>${isEn ? 'Coming soon' : 'Próximamente'}</span>
+          </div>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">${isEn && p.titleEn ? p.titleEn : p.title}</h3>
+          <p class="project-desc">${isEn && p.descEn ? p.descEn : p.desc}</p>
+          <div class="project-tech">
+            ${p.tech.map(t => `<span>${t}</span>`).join('')}
+          </div>
+          <div class="project-links">
+            <a href="${p.link}" class="btn btn-sm">${isEn ? 'View project' : 'Ver proyecto'}</a>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    const newReveals = grid.querySelectorAll('.reveal:not(.visible)');
+    newReveals.forEach(el => revealObserver.observe(el));
+  }
+
+  // ---- NAVBAR SCROLL ----
   const navbar = document.getElementById('navbar');
-  let lastScroll = 0;
 
   window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > 50) {
+    if (window.pageYOffset > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-    lastScroll = currentScroll;
   });
 
   // ---- MOBILE MENU ----
@@ -58,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
   });
 
-  // Close menu on link click
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       menuToggle.classList.remove('active');
@@ -67,14 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- ACTIVE NAV LINK ON SCROLL ----
+  // ---- ACTIVE NAV LINK ----
   const sections = document.querySelectorAll('section[id]');
   const navLinkEls = document.querySelectorAll('.nav-link');
 
   function updateActiveLink() {
     const scrollPos = window.pageYOffset + 150;
     let currentId = '';
-
     sections.forEach(section => {
       const top = section.offsetTop;
       const height = section.offsetHeight;
@@ -82,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentId = section.getAttribute('id');
       }
     });
-
     navLinkEls.forEach(link => {
       link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
     });
@@ -90,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', updateActiveLink);
 
-  // ---- SCROLL REVEAL (Intersection Observer) ----
+  // ---- SCROLL REVEAL ----
   const revealEls = document.querySelectorAll('.reveal');
 
   const revealObserver = new IntersectionObserver(entries => {
@@ -107,143 +221,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
   revealEls.forEach(el => revealObserver.observe(el));
 
-  // ---- PARTICLES (Hero Canvas) ----
-  const canvas = document.getElementById('particlesCanvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animId;
-    let mouseX = -1000;
-    let mouseY = -1000;
+  // ---- THREE.JS ----
+  const container = document.getElementById('three-container');
+  if (container && typeof THREE !== 'undefined') {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 22;
 
-    function resizeCanvas() {
-      const hero = canvas.parentElement;
-      canvas.width = hero.offsetWidth;
-      canvas.height = hero.offsetHeight;
-    }
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
 
-    class Particle {
-      constructor() {
-        this.reset();
-      }
+    const geometries = [
+      new THREE.TorusKnotGeometry(1.8, 0.6, 100, 16),
+      new THREE.OctahedronGeometry(1.6),
+      new THREE.IcosahedronGeometry(1.5),
+      new THREE.TorusGeometry(1.8, 0.4, 16, 48),
+      new THREE.DodecahedronGeometry(1.4)
+    ];
 
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2.5 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.6;
-        this.speedY = (Math.random() - 0.5) * 0.6;
-        this.opacity = Math.random() * 0.5 + 0.1;
-        this.color = Math.random() > 0.7 ? '#2196F3' : '#8BC34A';
-        this.pulseSpeed = Math.random() * 0.02 + 0.005;
-        this.pulseOffset = Math.random() * Math.PI * 2;
-      }
+    const colors = [0x8BC34A, 0x2196F3, 0x6B8E23, 0x64B5F6, 0x9CCC65];
+    const meshes = [];
 
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.pulseOffset += this.pulseSpeed;
-
-        this.opacity = Math.max(0.05, Math.min(0.6,
-          (Math.sin(this.pulseOffset) * 0.3 + 0.4)
-        ));
-
-        // Mouse interaction
-        const dx = mouseX - this.x;
-        const dy = mouseY - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          const force = (120 - dist) / 120;
-          this.x -= dx * force * 0.01;
-          this.y -= dy * force * 0.01;
-        }
-
-        // Wrap around
-        if (this.x < -10) this.x = canvas.width + 10;
-        if (this.x > canvas.width + 10) this.x = -10;
-        if (this.y < -10) this.y = canvas.height + 10;
-        if (this.y > canvas.height + 10) this.y = -10;
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-    }
-
-    function initParticles() {
-      const count = Math.min(Math.floor(canvas.width * canvas.height / 8000), 80);
-      particles = Array.from({ length: count }, () => new Particle());
-    }
-
-    function drawConnections() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.15;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = '#8BC34A';
-            ctx.globalAlpha = alpha;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-            ctx.globalAlpha = 1;
-          }
-        }
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
+    geometries.forEach((geo, i) => {
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: colors[i],
+        wireframe: true,
+        metalness: 0.1,
+        roughness: 0.4,
+        transparent: true,
+        opacity: 0.25 + Math.random() * 0.15
       });
-      drawConnections();
-      animId = requestAnimationFrame(animateParticles);
-    }
-
-    canvas.addEventListener('mousemove', e => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      const mesh = new THREE.Mesh(geo, mat);
+      const radius = 5 + Math.random() * 4;
+      const angle = (i / geometries.length) * Math.PI * 2;
+      mesh.position.set(
+        Math.cos(angle) * radius,
+        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 8 - 4
+      );
+      mesh.userData = {
+        rotSpeedX: (Math.random() - 0.5) * 0.015,
+        rotSpeedY: (Math.random() - 0.5) * 0.015,
+        rotSpeedZ: (Math.random() - 0.5) * 0.01,
+        floatSpeed: 0.002 + Math.random() * 0.003,
+        floatOffset: Math.random() * Math.PI * 2,
+        baseY: mesh.position.y
+      };
+      scene.add(mesh);
+      meshes.push(mesh);
     });
 
-    canvas.addEventListener('mouseleave', () => {
-      mouseX = -1000;
-      mouseY = -1000;
+    let mouseX = 0, mouseY = 0;
+
+    container.addEventListener('mousemove', e => {
+      const rect = container.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left) / rect.width - 0.5;
+      mouseY = (e.clientY - rect.top) / rect.height - 0.5;
     });
 
-    // Touch for mobile
-    canvas.addEventListener('touchmove', e => {
+    container.addEventListener('touchmove', e => {
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      mouseX = touch.clientX - rect.left;
-      mouseY = touch.clientY - rect.top;
+      const rect = container.getBoundingClientRect();
+      mouseX = (touch.clientX - rect.left) / rect.width - 0.5;
+      mouseY = (touch.clientY - rect.top) / rect.height - 0.5;
     }, { passive: true });
 
-    canvas.addEventListener('touchend', () => {
-      mouseX = -1000;
-      mouseY = -1000;
-    });
-
-    resizeCanvas();
-    initParticles();
-    animateParticles();
-
     window.addEventListener('resize', () => {
-      resizeCanvas();
-      initParticles();
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
     });
+
+    let clock = new THREE.Clock();
+
+    function animateThree() {
+      requestAnimationFrame(animateThree);
+      const t = clock.getElapsedTime();
+      meshes.forEach(mesh => {
+        mesh.rotation.x += mesh.userData.rotSpeedX;
+        mesh.rotation.y += mesh.userData.rotSpeedY;
+        mesh.rotation.z += mesh.userData.rotSpeedZ;
+        mesh.position.y = mesh.userData.baseY + Math.sin(t * mesh.userData.floatSpeed * 10 + mesh.userData.floatOffset) * 1.2;
+      });
+      camera.position.x += (mouseX * 3 - camera.position.x) * 0.03;
+      camera.position.y += (-mouseY * 2 - camera.position.y) * 0.03;
+      camera.lookAt(0, 0, 0);
+      renderer.render(scene, camera);
+    }
+
+    animateThree();
   }
 
   // ---- CONTACT FORM ----
@@ -259,11 +329,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildBody(name, email, message) {
-    return `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
+    return `${currentLang === 'en' ? 'Name' : 'Nombre'}: ${name}\n${currentLang === 'en' ? 'Email' : 'Email'}: ${email}\n\n${currentLang === 'en' ? 'Message' : 'Mensaje'}:\n${message}`;
   }
 
   function openMailtoUrl(name, email, message) {
-    const subject = `Contacto desde La Oficina - ${name}`;
+    const subject = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
     const body = buildBody(name, email, message);
     const a = document.createElement('a');
     a.href = `mailto:theoffice7075@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -274,14 +344,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openGmailWeb(name, email, message) {
-    const subject = `Contacto desde La Oficina - ${name}`;
+    const subject = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
     const body = buildBody(name, email, message);
     const params = new URLSearchParams({
-      view: 'cm',
-      fs: '1',
+      view: 'cm', fs: '1',
       to: 'theoffice7075@gmail.com',
-      su: subject,
-      body: body
+      su: subject, body: body
     });
     return `https://mail.google.com/mail/?${params.toString()}`;
   }
@@ -290,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async e => {
       e.preventDefault();
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Redirigiendo...';
+      submitBtn.textContent = langData['contact.form.sending'] || (currentLang === 'en' ? 'Redirecting...' : 'Redirigiendo...');
       formStatus.textContent = '';
       formStatus.className = 'form-status';
 
@@ -299,18 +367,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const message = form.message.value.trim();
 
       if (!name || !email || !message) {
-        formStatus.textContent = 'Por favor completa todos los campos.';
+        formStatus.textContent = langData['contact.form.error.required'] || 'Por favor completa todos los campos.';
         formStatus.className = 'form-status error';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar mensaje';
+        submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
         return;
       }
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        formStatus.textContent = 'Por favor ingresa un correo válido.';
+        formStatus.textContent = langData['contact.form.error.email'] || 'Por favor ingresa un correo válido.';
         formStatus.className = 'form-status error';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar mensaje';
+        submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
         return;
       }
 
@@ -318,27 +386,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       switch (platform) {
         case 'pc':
-          formStatus.textContent = 'Abriendo Gmail...';
+          formStatus.textContent = langData['contact.form.success'] || (currentLang === 'en' ? 'Opening Gmail...' : 'Abriendo Gmail...');
           formStatus.className = 'form-status success';
           await new Promise(r => setTimeout(r, 400));
           window.open(openGmailWeb(name, email, message), '_blank');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Enviar mensaje';
-          return;
+          break;
         case 'android':
         case 'ios':
-          formStatus.textContent = 'Abriendo tu correo...';
+          formStatus.textContent = currentLang === 'en' ? 'Opening your email...' : 'Abriendo tu correo...';
           formStatus.className = 'form-status success';
           await new Promise(r => setTimeout(r, 400));
           openMailtoUrl(name, email, message);
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Enviar mensaje';
-          return;
+          break;
       }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
     });
   }
 
-  // ---- PARALLAX EFFECT ON HERO GRADIENTS (optional touch) ----
+  // ---- PARALLAX ----
   const hero = document.querySelector('.hero');
   if (hero) {
     hero.addEventListener('mousemove', e => {
@@ -349,6 +416,10 @@ document.addEventListener('DOMContentLoaded', () => {
       hero.style.setProperty('--mouse-y', y);
     });
   }
+
+  // ---- INIT ----
+  loadLang(currentLang);
+  renderProjects();
 
   console.log('🚀 La Oficina — Portfolio loaded');
 });
