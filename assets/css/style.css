@@ -240,31 +240,16 @@ ul { list-style: none; }
   height: 20px;
 }
 
-[data-theme="dark"] .theme-toggle .sun-icon,
 .theme-toggle .moon-icon {
   display: none;
 }
 
-[data-theme="dark"] .theme-toggle .moon-icon {
-  display: block;
+[data-theme="light"] .theme-toggle .sun-icon {
+  display: none;
 }
 
 [data-theme="light"] .theme-toggle .moon-icon {
-  display: none;
-}
-
-[data-theme="light"] .theme-toggle .sun-icon {
   display: block;
-}
-
-html:not([data-theme]) .theme-toggle .moon-icon,
-html:not([data-theme="light"]) .theme-toggle .moon-icon {
-  display: block;
-}
-
-html:not([data-theme]) .theme-toggle .sun-icon,
-html:not([data-theme="dark"]) .theme-toggle .sun-icon {
-  display: none;
 }
 
 /* --- Nav Links --- */
