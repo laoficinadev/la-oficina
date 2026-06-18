@@ -51,10 +51,6 @@
   "footer.nav.title": "Navegación",
   "footer.social.title": "Síguenos",
   "footer.copyright": "© 2026 La Oficina. Todos los derechos reservados.",
-  "theme.light": "Modo claro",
-  "theme.dark": "Modo oscuro",
-  "nav.langLabel": "Cambiar Idioma",
-  "theme.lightLabel": "Cambiar a Modo Claro",
-  "theme.darkLabel": "Cambiar a Modo Oscuro"
+  "nav.langLabel": "Cambiar Idioma"
 }
 

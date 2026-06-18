@@ -378,12 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
       }
 
+      form.reset();
       submitBtn.disabled = false;
       submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
     });
   }
 
-  // ---- PARALLAX ----
+  // ---- PARALLAX TILT ----
   const hero = document.querySelector('.hero');
   if (hero) {
     hero.addEventListener('mousemove', e => {
@@ -394,6 +395,21 @@ document.addEventListener('DOMContentLoaded', () => {
       hero.style.setProperty('--mouse-y', y);
     });
   }
+
+  const tiltCards = document.querySelectorAll('.service-card');
+  tiltCards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.setProperty('--tilt-x', x);
+      card.style.setProperty('--tilt-y', y);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--tilt-x', 0);
+      card.style.setProperty('--tilt-y', 0);
+    });
+  });
 
   // ---- INIT ----
   loadLang(currentLang);
