@@ -39,8 +39,8 @@
   "contact.form.message": "Mensaje",
   "contact.form.messagePlaceholder": "Cuéntanos sobre tu proyecto...",
   "contact.form.submit": "Enviar mensaje",
-"contact.form.sending": "Enviando...",
-"contact.form.success": "Mensaje enviado con éxito!",
+  "contact.form.sending": "Enviando...",
+  "contact.form.success": "Mensaje enviado con éxito!",
   "contact.form.error.required": "Por favor completa todos los campos.",
   "contact.form.error.email": "Por favor ingresa un correo válido.",
   "contact.email.label": "Correo electrónico",
@@ -50,7 +50,6 @@
   "footer.desc": "Transformando ideas en soluciones digitales.",
   "footer.nav.title": "Navegación",
   "footer.social.title": "Síguenos",
-  "footer.copyright": "© 2026 La Oficina. Todos los derechos reservados.",
-  "nav.langLabel": "Cambiar Idioma"
+  "footer.copyright": "© 2026 La Oficina. Todos los derechos reservados."
 }
 

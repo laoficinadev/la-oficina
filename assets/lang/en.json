@@ -39,8 +39,8 @@
   "contact.form.message": "Message",
   "contact.form.messagePlaceholder": "Tell us about your project...",
   "contact.form.submit": "Send message",
-"contact.form.sending": "Sending...",
-"contact.form.success": "Message sent successfully!",
+  "contact.form.sending": "Sending...",
+  "contact.form.success": "Message sent successfully!",
   "contact.form.error.required": "Please fill in all fields.",
   "contact.form.error.email": "Please enter a valid email.",
   "contact.email.label": "Email",
@@ -50,7 +50,6 @@
   "footer.desc": "Turning ideas into digital solutions.",
   "footer.nav.title": "Navigation",
   "footer.social.title": "Follow us",
-  "footer.copyright": "© 2026 La Oficina. All rights reserved.",
-  "nav.langLabel": "Change Language"
+  "footer.copyright": "© 2026 La Oficina. All rights reserved."
 }
 
