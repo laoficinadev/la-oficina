@@ -223,6 +223,17 @@ ul { list-style: none; }
   box-shadow: 0 0 16px var(--verde-glow);
 }
 
+.lang-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lang-toggle:disabled:hover {
+  color: var(--gris-300);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
 /* --- Nav Links --- */
 .nav-links {
   display: flex;

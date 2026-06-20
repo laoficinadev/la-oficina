@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       console.warn('Failed to load language:', lang);
     }
+    const btn = document.getElementById('langToggle');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = lang === 'en' ? 'EN' : 'ES';
+    }
   }
 
   function applyLang() {
@@ -38,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const langToggle = document.getElementById('langToggle');
   if (langToggle) {
     langToggle.addEventListener('click', () => {
+      if (langToggle.disabled) return;
+      langToggle.disabled = true;
+      langToggle.textContent = '⌛';
       currentLang = currentLang === 'en' ? 'es' : 'en';
       localStorage.setItem('lang', currentLang);
       loadLang(currentLang);
@@ -299,44 +307,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const formStatus = document.getElementById('formStatus');
   const submitBtn = document.getElementById('submitBtn');
 
-  function detectPlatform() {
-    const ua = navigator.userAgent;
-    if (/android/i.test(ua)) return 'android';
-    if (/iPad|iPhone|iPod/i.test(ua)) return 'ios';
-    return 'pc';
-  }
-
-  function buildBody(name, email, message) {
-    return `${currentLang === 'en' ? 'Name' : 'Nombre'}: ${name}\n${currentLang === 'en' ? 'Email' : 'Email'}: ${email}\n\n${currentLang === 'en' ? 'Message' : 'Mensaje'}:\n${message}`;
-  }
-
-  function openMailtoUrl(name, email, message) {
-    const subject = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
-    const body = buildBody(name, email, message);
-    const a = document.createElement('a');
-    a.href = `mailto:theoffice7075@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  function openGmailWeb(name, email, message) {
-    const subject = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
-    const body = buildBody(name, email, message);
-    const params = new URLSearchParams({
-      view: 'cm', fs: '1',
-      to: 'theoffice7075@gmail.com',
-      su: subject, body: body
-    });
-    return `https://mail.google.com/mail/?${params.toString()}`;
-  }
-
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
       submitBtn.disabled = true;
-      submitBtn.textContent = langData['contact.form.sending'] || (currentLang === 'en' ? 'Redirecting...' : 'Redirigiendo...');
+      submitBtn.textContent = langData['contact.form.sending'] || (currentLang === 'en' ? 'Sending...' : 'Enviando...');
       formStatus.textContent = '';
       formStatus.className = 'form-status';
 
@@ -360,25 +335,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const platform = detectPlatform();
-
-      switch (platform) {
-        case 'pc':
-          formStatus.textContent = langData['contact.form.success'] || (currentLang === 'en' ? 'Opening Gmail...' : 'Abriendo Gmail...');
-          formStatus.className = 'form-status success';
-          await new Promise(r => setTimeout(r, 400));
-          window.open(openGmailWeb(name, email, message), '_blank');
-          break;
-        case 'android':
-        case 'ios':
-          formStatus.textContent = currentLang === 'en' ? 'Opening your email...' : 'Abriendo tu correo...';
-          formStatus.className = 'form-status success';
-          await new Promise(r => setTimeout(r, 400));
-          openMailtoUrl(name, email, message);
-          break;
+      const subjectEl = form.querySelector('[name="subject"]');
+      if (subjectEl) {
+        subjectEl.value = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
       }
 
-      form.reset();
+      try {
+        const formData = new FormData(form);
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          formStatus.textContent = langData['contact.form.success'] || (currentLang === 'en' ? 'Message sent successfully!' : 'Mensaje enviado con éxito!');
+          formStatus.className = 'form-status success';
+          form.reset();
+        } else {
+          formStatus.textContent = data.message || 'Error al enviar el mensaje.';
+          formStatus.className = 'form-status error';
+        }
+      } catch (err) {
+        formStatus.textContent = 'Error de conexión. Intenta de nuevo.';
+        formStatus.className = 'form-status error';
+      }
+
       submitBtn.disabled = false;
       submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
     });

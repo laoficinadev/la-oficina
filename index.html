@@ -185,7 +185,10 @@
       </div>
 
       <div class="contact-grid">
-        <form class="contact-form reveal" id="contactForm">
+        <form class="contact-form reveal" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="6c17403c-403f-4ff8-93a0-5740bfa93f1b" />
+          <input type="hidden" name="subject" value="" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
           <div class="form-group">
             <label for="name" data-i18n="contact.form.name">Nombre</label>
             <input type="text" id="name" name="name" required data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre" />
