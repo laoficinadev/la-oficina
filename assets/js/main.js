@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---- LANGUAGE SWITCHER ----
   let langData = {};
-  let currentLang = localStorage.getItem('lang') || 'es';
+  let currentLang = localStorage.getItem('lang') || ((navigator.language || '').slice(0, 2) === 'en' ? 'en' : 'es');
 
   async function loadLang(lang) {
     try {
