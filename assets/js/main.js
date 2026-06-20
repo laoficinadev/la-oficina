@@ -72,15 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.innerHTML = projects.map(p => `
       <article class="project-card reveal">
         <div class="project-image">
-          <div class="project-placeholder">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3"/>
-              <polygon points="35,25 35,55 58,40" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="project-overlay">
-            <span>${isEn ? 'Coming soon' : 'Próximamente'}</span>
-          </div>
+          ${p.image
+            ? `<img src="${p.image}" alt="${isEn && p.titleEn ? p.titleEn : p.title}" class="project-img" />`
+            : `<div class="project-placeholder">
+              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3"/>
+                <polygon points="35,25 35,55 58,40" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="project-overlay">
+              <span>${isEn ? 'Coming soon' : 'Próximamente'}</span>
+            </div>`
+          }
         </div>
         <div class="project-body">
           <h3 class="project-title">${isEn && p.titleEn ? p.titleEn : p.title}</h3>

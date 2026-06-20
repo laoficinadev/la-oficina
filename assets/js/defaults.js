@@ -7,7 +7,8 @@ const DEFAULT_PROJECTS = [
     descEn: 'Web player with multi-format support, dynamic playlists and playback control.',
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Python'],
     link: '#',
-    icon: 'play'
+    icon: 'play',
+    image: 'assets/img/reproductor.jpeg'
   },
   {
     id: 'proj-2',
