@@ -217,6 +217,10 @@ ul { list-style: none; }
   letter-spacing: 0.5px;
 }
 
+.lang-toggle {
+  margin-left: auto;
+}
+
 .lang-toggle:hover {
   color: var(--verde);
   border-color: var(--verde);
