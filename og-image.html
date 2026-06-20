@@ -17,7 +17,8 @@
   <div class="preview">
     <canvas id="ogCanvas" width="1200" height="630"></canvas>
   </div>
-  <button class="btn" id="downloadBtn">Descargar OG Image</button>
+  <button class="btn" id="downloadBtn">Descargar OG Image (PNG)</button>
+  <button class="btn" id="downloadJpgBtn" style="background:#333;color:#8BC34A;">Descargar OG Image (JPG)</button>
   <button class="btn" id="favBtn" style="background:#333;color:#8BC34A;">Descargar Favicon (32×32)</button>
   <p class="status" id="status"></p>
   <p class="info">
@@ -211,6 +212,16 @@
       link.click();
       document.body.removeChild(link);
       document.getElementById('status').textContent = '✔ og-image.png descargada';
+    });
+
+    document.getElementById('downloadJpgBtn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'og-image.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 0.92);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      document.getElementById('status').textContent = '✔ og-image.jpg descargada';
     });
 
     // Favicon export
