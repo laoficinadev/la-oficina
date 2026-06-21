@@ -40,7 +40,7 @@
   "contact.form.messagePlaceholder": "Cuéntanos sobre tu proyecto...",
   "contact.form.submit": "Enviar mensaje",
   "contact.form.sending": "Enviando...",
-  "contact.form.success": "Mensaje enviado con éxito!",
+  "contact.form.success": "Se ha enviado el mensaje. Revisa tu correo electrónico para verificarlo.",
   "contact.form.error.required": "Por favor completa todos los campos.",
   "contact.form.error.email": "Por favor ingresa un correo válido.",
   "contact.email.label": "Correo electrónico",

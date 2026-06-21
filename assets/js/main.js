@@ -352,8 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
 
         if (data.success) {
-          formStatus.textContent = langData['contact.form.success'] || (currentLang === 'en' ? 'Message sent successfully!' : 'Mensaje enviado con éxito!');
-          formStatus.className = 'form-status success';
+          const msg = langData['contact.form.success'] || (currentLang === 'en' ? 'The message has been sent. Check your email to verify it.' : 'Se ha enviado el mensaje. Revisa tu correo electrónico para verificarlo.');
+          document.getElementById('modalMessage').textContent = msg;
+          document.getElementById('modalOverlay').classList.add('active');
           form.reset();
         } else {
           formStatus.textContent = data.message || 'Error al enviar el mensaje.';
@@ -368,6 +369,16 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
     });
   }
+
+  // ---- MODAL ----
+  document.getElementById('modalClose').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('active');
+  });
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+  });
 
   // ---- PARALLAX TILT ----
   const hero = document.querySelector('.hero');
