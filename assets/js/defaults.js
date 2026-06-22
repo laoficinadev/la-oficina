@@ -27,7 +27,7 @@ const DEFAULT_PROJECTS = [
     desc: 'Plataforma de contratación de viajes de carga con seguimiento en tiempo real y cotización instantánea.',
     descEn: 'Cargo trip booking platform with real-time tracking and instant quotes.',
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
-    link: '#',
+    link: 'https://hamletsgonzalez-glitch.github.io/pagina-transporte-scorp/',
     icon: 'truck',
     image: 'assets/img/viajes-camiones.png'
   }

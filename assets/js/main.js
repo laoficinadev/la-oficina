@@ -407,6 +407,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ---- HERO SCROLL PARALLAX ----
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) {
+    const heroBadge = heroEl.querySelector('.hero-badge');
+    const heroTitle = heroEl.querySelector('.hero-title');
+    const heroSubtitle = heroEl.querySelector('.hero-subtitle');
+    const heroActions = heroEl.querySelector('.hero-actions');
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const y = window.pageYOffset;
+          const heroH = heroEl.offsetHeight;
+          if (y < heroH) {
+            if (heroBadge) heroBadge.style.transform = `translateY(${y * 0.15}px)`;
+            if (heroTitle) heroTitle.style.transform = `translateY(${y * 0.3}px)`;
+            if (heroSubtitle) heroSubtitle.style.transform = `translateY(${y * 0.2}px)`;
+            if (heroActions) heroActions.style.transform = `translateY(${y * 0.1}px)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+
   // ---- INIT ----
   loadLang(currentLang);
   renderProjects();
