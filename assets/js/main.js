@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${p.tech.map(t => `<span>${t}</span>`).join('')}
           </div>
           <div class="project-links">
-            <a href="${p.link}" class="btn btn-sm">${isEn ? 'View project' : 'Ver proyecto'}</a>
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn btn-sm">${isEn ? 'View project' : 'Ver proyecto'}</a>
           </div>
         </div>
       </article>
