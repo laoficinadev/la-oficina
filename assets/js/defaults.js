@@ -28,6 +28,7 @@ const DEFAULT_PROJECTS = [
     descEn: 'Cargo trip booking platform with real-time tracking and instant quotes.',
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
     link: '#',
-    icon: 'truck'
+    icon: 'truck',
+    image: 'assets/img/viajes-camiones.png'
   }
 ];
