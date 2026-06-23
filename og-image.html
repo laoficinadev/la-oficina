@@ -41,42 +41,42 @@
       ctx.fillStyle = '#0a0a0a';
       ctx.fillRect(0, 0, W, H);
 
-      const cx = 600, cy = 200, r = 120;
+      const cx = 600, cy = 250, r = 90;
 
       // Big radial glow behind logo
-      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r + 120);
-      glow.addColorStop(0, 'rgba(139,195,74,0.15)');
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r + 100);
+      glow.addColorStop(0, 'rgba(139,195,74,0.12)');
       glow.addColorStop(1, 'rgba(139,195,74,0)');
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(cx, cy, r + 120, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r + 100, 0, Math.PI * 2);
       ctx.fill();
 
       // Second glow bottom-right
-      const glow2 = ctx.createRadialGradient(950, 500, 0, 950, 500, 400);
-      glow2.addColorStop(0, 'rgba(33,150,243,0.08)');
+      const glow2 = ctx.createRadialGradient(900, 450, 0, 900, 450, 300);
+      glow2.addColorStop(0, 'rgba(33,150,243,0.06)');
       glow2.addColorStop(1, 'rgba(33,150,243,0)');
       ctx.fillStyle = glow2;
       ctx.beginPath();
-      ctx.arc(950, 500, 400, 0, Math.PI * 2);
+      ctx.arc(900, 450, 300, 0, Math.PI * 2);
       ctx.fill();
 
       // Logo circle
       ctx.strokeStyle = '#8BC34A';
-      ctx.lineWidth = 20;
+      ctx.lineWidth = 14;
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.stroke();
 
       // Inner subtle ring
-      ctx.strokeStyle = 'rgba(139,195,74,0.15)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(139,195,74,0.12)';
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(cx, cy, r - 28, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r - 22, 0, Math.PI * 2);
       ctx.stroke();
 
       // Code symbol </>
-      ctx.font = '800 130px "Courier New", monospace';
+      ctx.font = '800 85px "Courier New", monospace';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       const fullText = '</>';
@@ -87,33 +87,33 @@
       ctx.fillStyle = '#558B2F';
       ctx.fillText('>', cx - fullWidth / 2 + leftWidth, cy);
 
-      // Solid card behind text for maximum contrast
+      // Solid card behind text for max contrast
       ctx.fillStyle = '#0a0a0a';
-      ctx.fillRect(0, 385, W, 170);
+      ctx.fillRect(0, 365, W, 185);
 
       // Text: LA OFICINA
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      ctx.font = '900 150px "Poppins", Arial, sans-serif';
-      const textGrad = ctx.createLinearGradient(cx - 300, 0, cx + 300, 0);
+      ctx.font = '900 110px "Poppins", Arial, sans-serif';
+      const textGrad = ctx.createLinearGradient(cx - 240, 0, cx + 240, 0);
       textGrad.addColorStop(0, '#8BC34A');
       textGrad.addColorStop(0.5, '#8BC34A');
       textGrad.addColorStop(1, '#558B2F');
       ctx.fillStyle = textGrad;
-      ctx.fillText('LA OFICINA', cx, 455);
+      ctx.fillText('LA OFICINA', cx, 445);
 
       // Tagline
       ctx.fillStyle = '#bbb';
-      ctx.font = '600 50px "Poppins", Arial, sans-serif';
-      ctx.fillText('Desarrollo y Tecnología', cx, 525);
+      ctx.font = '600 38px "Poppins", Arial, sans-serif';
+      ctx.fillText('Desarrollo y Tecnología', cx, 515);
 
       // Bottom accent line
       ctx.strokeStyle = '#8BC34A';
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(cx - 130, 565);
-      ctx.lineTo(cx + 130, 565);
+      ctx.moveTo(cx - 100, 550);
+      ctx.lineTo(cx + 100, 550);
       ctx.stroke();
     }
 
