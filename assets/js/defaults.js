@@ -11,16 +11,6 @@ const DEFAULT_PROJECTS = [
     image: 'assets/img/reproductor.jpeg'
   },
   {
-    id: 'proj-2',
-    title: 'Red Social',
-    titleEn: 'Social Network',
-    desc: 'Plataforma social con autenticación, publicaciones con imágenes, perfiles de usuario y feed en tiempo real.',
-    descEn: 'Social platform with authentication, image posts, user profiles and real-time feed.',
-    tech: ['Next.js', 'React', 'TypeScript', 'Supabase', 'Tailwind'],
-    link: '#',
-    icon: 'network'
-  },
-  {
     id: 'proj-3',
     title: 'Viajes de Camiones',
     titleEn: 'Truck Trips',
