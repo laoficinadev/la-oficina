@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return parsed.map(p => {
             const def = DEFAULT_PROJECTS.find(d => d.id === p.id);
             return def ? { ...def, ...p, link: def.link && def.link !== '#' ? def.link : p.link } : p;
-          }).filter(p => DEFAULT_PROJECTS.some(d => d.id === p.id));
+          });
         }
       }
     } catch (e) {}
