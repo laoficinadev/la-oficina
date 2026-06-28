@@ -1,14 +1,51 @@
 let projects = [];
 let editingId = null;
+let loginAttempts = 0;
+let loginBlockedUntil = 0;
+let loginTimer = null;
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
 
 function authenticate() {
+  const now = Date.now();
+  if (now < loginBlockedUntil) {
+    const secs = Math.ceil((loginBlockedUntil - now) / 1000);
+    document.getElementById('loginError').textContent = `Demasiados intentos. Espera ${secs} segundos.`;
+    return;
+  }
+  clearInterval(loginTimer);
   const pass = document.getElementById('adminPass').value;
   if (pass === 'laoficina') {
+    loginAttempts = 0;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     loadProjects();
   } else {
+    loginAttempts++;
     document.getElementById('loginError').textContent = 'Contraseña incorrecta';
+    if (loginAttempts >= 3) {
+      loginBlockedUntil = Date.now() + 30000;
+      loginAttempts = 0;
+      const inp = document.getElementById('adminPass');
+      inp.disabled = true;
+      const btn = document.querySelector('.login-box button');
+      btn.disabled = true;
+      loginTimer = setInterval(() => {
+        const rem = Math.ceil((loginBlockedUntil - Date.now()) / 1000);
+        if (rem <= 0) {
+          clearInterval(loginTimer);
+          inp.disabled = false;
+          btn.disabled = false;
+          document.getElementById('loginError').textContent = '';
+        } else {
+          document.getElementById('loginError').textContent = `Demasiados intentos. Espera ${rem} segundos.`;
+        }
+      }, 500);
+    }
   }
 }
 
@@ -48,12 +85,12 @@ function renderProjects() {
         <button onclick="moveProject(${i}, 1)" ${i === projects.length - 1 ? 'disabled' : ''} title="Bajar">&#9660;</button>
       </div>
       <div class="admin-project-info">
-        <strong>${p.title}</strong>
-        <span class="admin-project-tech">${(p.tech || []).join(', ')}</span>
+        <strong>${escapeHtml(p.title)}</strong>
+        <span class="admin-project-tech">${escapeHtml((p.tech || []).join(', '))}</span>
       </div>
       <div class="admin-project-actions">
-        <button class="btn-admin btn-edit" onclick="editProject('${p.id}')">Editar</button>
-        <button class="btn-admin btn-delete" onclick="deleteProject('${p.id}')">Eliminar</button>
+        <button class="btn-admin btn-edit" onclick="editProject('${escapeHtml(p.id)}')">Editar</button>
+        <button class="btn-admin btn-delete" onclick="deleteProject('${escapeHtml(p.id)}')">Eliminar</button>
       </div>
     </div>
   `).join('');
