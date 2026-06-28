@@ -136,17 +136,17 @@ function renderProjects() {
   list.innerHTML = projects.map((p, i) => `
     <div class="admin-project-item">
       <div class="admin-project-order">
-        <button onclick="moveProject(${i}, -1)" ${i === 0 ? 'disabled' : ''} title="Subir">&#9650;</button>
+        <button data-action="move" data-idx="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''} title="Subir">&#9650;</button>
         <span>${i + 1}</span>
-        <button onclick="moveProject(${i}, 1)" ${i === projects.length - 1 ? 'disabled' : ''} title="Bajar">&#9660;</button>
+        <button data-action="move" data-idx="${i}" data-dir="1" ${i === projects.length - 1 ? 'disabled' : ''} title="Bajar">&#9660;</button>
       </div>
       <div class="admin-project-info">
         <strong>${escapeHtml(p.title)}</strong>
         <span class="admin-project-tech">${escapeHtml((p.tech || []).join(', '))}</span>
       </div>
       <div class="admin-project-actions">
-        <button class="btn-admin btn-edit" onclick="editProject('${escapeHtml(p.id)}')">Editar</button>
-        <button class="btn-admin btn-delete" onclick="deleteProject('${escapeHtml(p.id)}')">Eliminar</button>
+        <button class="btn-admin btn-edit" data-action="edit" data-id="${escapeHtml(p.id)}">Editar</button>
+        <button class="btn-admin btn-delete" data-action="delete" data-id="${escapeHtml(p.id)}">Eliminar</button>
       </div>
     </div>
   `).join('');
@@ -263,6 +263,27 @@ function logout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Event delegation for project list actions
+  document.getElementById('projectsList').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    if (action === 'move') moveProject(Number(btn.dataset.idx), Number(btn.dataset.dir));
+    else if (action === 'edit') editProject(btn.dataset.id);
+    else if (action === 'delete') deleteProject(btn.dataset.id);
+  });
+
+  // Button event listeners
+  document.getElementById('loginBtn').addEventListener('click', authenticate);
+  document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  document.getElementById('newProjectBtn').addEventListener('click', () => showForm(null));
+  document.getElementById('exportBtn').addEventListener('click', exportProjects);
+  document.getElementById('resetBtn').addEventListener('click', resetDefaults);
+  document.getElementById('saveBtn').addEventListener('click', saveForm);
+  document.getElementById('cancelBtn').addEventListener('click', cancelForm);
+  document.getElementById('importFile').addEventListener('change', importProjects);
+
   if (window.__workerAuth) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';

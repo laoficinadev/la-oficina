@@ -6,19 +6,20 @@
   <title>404 — La Oficina</title>
   <meta name="description" content="Página no encontrada." />
   <meta name="robots" content="noindex" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'self';" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="/la-oficina/favicon.png" />
   <link rel="stylesheet" href="/la-oficina/assets/css/style.css" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KK5NLVJHXP"></script>
-  <script>
+  <script nonce="YjFmNjEwM2U1">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-KK5NLVJHXP');
   </script>
-  <style>
+  <style nonce="YjFmNjEwM2U1">
     .page-404 {
       min-height: calc(100vh - 72px - 180px);
       display: flex;
@@ -179,7 +180,7 @@
     </div>
   </footer>
 
-  <script>
+  <script nonce="YjFmNjEwM2U1">
     (function() {
       var lang = localStorage.getItem('lang') || ((navigator.language || '').slice(0, 2) === 'en' ? 'en' : 'es');
       var isEn = lang === 'en';
