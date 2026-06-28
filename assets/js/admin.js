@@ -1,4 +1,12 @@
-let projects = [];
+const ADMIN_HASH = 'd8a07aa665857d3b8b480f5ae27f9584edcab9d6b882d03b2f5d298fa7d2c514';
+
+function hashPass(pass) {
+  const buf = new TextEncoder().encode(pass);
+  return crypto.subtle.digest('SHA-256', buf).then(h => {
+    const hex = Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return hex;
+  });
+}
 let editingId = null;
 let loginAttempts = 0;
 let loginBlockedUntil = 0;
@@ -54,7 +62,7 @@ function sanitizeUrl(url) {
   }
 }
 
-function authenticate() {
+async function authenticate() {
   const now = Date.now();
   if (now < loginBlockedUntil) {
     const secs = Math.ceil((loginBlockedUntil - now) / 1000);
@@ -63,7 +71,8 @@ function authenticate() {
   }
   clearInterval(loginTimer);
   const pass = document.getElementById('adminPass').value;
-  if (pass === 'laoficina') {
+  const inputHash = await hashPass(pass);
+  if (inputHash === ADMIN_HASH) {
     loginAttempts = 0;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
@@ -255,6 +264,16 @@ function logout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.__workerAuth) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    sessionStorage.setItem('adminAuth', Date.now());
+    resetInactivityTimer();
+    activityEvents.forEach(ev => document.addEventListener(ev, resetInactivityTimer, { passive: true }));
+    loadProjects();
+    return;
+  }
+
   if (STARTUP_CHECK && checkSession()) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
