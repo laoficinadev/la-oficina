@@ -10,6 +10,9 @@
   box-sizing: border-box;
 }
 
+.hidden { display: none !important; }
+.turnstile-wrap { margin-bottom: 16px; }
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;

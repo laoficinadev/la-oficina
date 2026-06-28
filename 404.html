@@ -6,7 +6,7 @@
   <title>404 — La Oficina</title>
   <meta name="description" content="Página no encontrada." />
   <meta name="robots" content="noindex" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'self';" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -68,6 +68,7 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+    .lang-hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -108,14 +109,14 @@
       </div>
       <h1 class="error-code">404</h1>
       <h2 class="error-title es">Página no encontrada</h2>
-      <h2 class="error-title en" style="display:none">Page not found</h2>
+      <h2 class="error-title en lang-hidden">Page not found</h2>
       <p class="error-desc es">La página que buscas no existe o fue movida. No te preocupes, puedes volver al inicio.</p>
-      <p class="error-desc en" style="display:none">The page you're looking for doesn't exist or has been moved. Don't worry, you can go back home.</p>
+      <p class="error-desc en lang-hidden">The page you're looking for doesn't exist or has been moved. Don't worry, you can go back home.</p>
       <div class="error-actions">
         <a href="/la-oficina/" class="btn btn-primary es">Volver al inicio</a>
-        <a href="/la-oficina/" class="btn btn-primary en" style="display:none">Back to home</a>
+        <a href="/la-oficina/" class="btn btn-primary en lang-hidden">Back to home</a>
         <a href="/la-oficina/#contacto" class="btn btn-secondary es">Contáctanos</a>
-        <a href="/la-oficina/#contacto" class="btn btn-secondary en" style="display:none">Contact us</a>
+        <a href="/la-oficina/#contacto" class="btn btn-secondary en lang-hidden">Contact us</a>
       </div>
     </div>
   </main>
@@ -134,25 +135,25 @@
           <span class="logo-text">LA<span class="logo-accent"> OFICINA</span></span>
         </div>
         <p class="footer-desc es">Transformando ideas en soluciones digitales.</p>
-        <p class="footer-desc en" style="display:none">Turning ideas into digital solutions.</p>
+        <p class="footer-desc en lang-hidden">Turning ideas into digital solutions.</p>
       </div>
       <div class="footer-links">
         <h4 class="es">Navegación</h4>
-        <h4 class="en" style="display:none">Navigation</h4>
+        <h4 class="en lang-hidden">Navigation</h4>
         <ul>
           <li><a href="/la-oficina/" class="es">Inicio</a></li>
-          <li><a href="/la-oficina/" class="en" style="display:none">Home</a></li>
+          <li><a href="/la-oficina/" class="en lang-hidden">Home</a></li>
           <li><a href="/la-oficina/#servicios" class="es">Servicios</a></li>
-          <li><a href="/la-oficina/#servicios" class="en" style="display:none">Services</a></li>
+          <li><a href="/la-oficina/#servicios" class="en lang-hidden">Services</a></li>
           <li><a href="/la-oficina/#proyectos" class="es">Proyectos</a></li>
-          <li><a href="/la-oficina/#proyectos" class="en" style="display:none">Projects</a></li>
+          <li><a href="/la-oficina/#proyectos" class="en lang-hidden">Projects</a></li>
           <li><a href="/la-oficina/#contacto" class="es">Contacto</a></li>
-          <li><a href="/la-oficina/#contacto" class="en" style="display:none">Contact</a></li>
+          <li><a href="/la-oficina/#contacto" class="en lang-hidden">Contact</a></li>
         </ul>
       </div>
       <div class="footer-social">
         <h4 class="es">Síguenos</h4>
-        <h4 class="en" style="display:none">Follow us</h4>
+        <h4 class="en lang-hidden">Follow us</h4>
         <div class="social-icons">
           <a href="https://github.com/laoficinadev" target="_blank" rel="noopener" aria-label="GitHub">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -175,7 +176,7 @@
     <div class="footer-bottom">
       <div class="container">
         <p class="es">&copy; 2026 La Oficina. Todos los derechos reservados.</p>
-        <p class="en" style="display:none">&copy; 2026 La Oficina. All rights reserved.</p>
+        <p class="en lang-hidden">&copy; 2026 La Oficina. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -186,8 +187,8 @@
       var isEn = lang === 'en';
 
       function apply() {
-        document.querySelectorAll('.es').forEach(function(el) { el.style.display = isEn ? 'none' : ''; });
-        document.querySelectorAll('.en').forEach(function(el) { el.style.display = isEn ? '' : 'none'; });
+        document.querySelectorAll('.lang-hidden').forEach(function(el) { el.classList.remove('lang-hidden'); });
+        document.querySelectorAll(isEn ? '.es' : '.en').forEach(function(el) { el.classList.add('lang-hidden'); });
         var btn = document.getElementById('langToggle');
         if (btn) btn.textContent = isEn ? 'EN' : 'ES';
       }
