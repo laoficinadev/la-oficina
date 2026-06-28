@@ -3,6 +3,35 @@ let editingId = null;
 let loginAttempts = 0;
 let loginBlockedUntil = 0;
 let loginTimer = null;
+let inactivityTimer = null;
+const INACTIVITY_LIMIT = 15 * 60 * 1000;
+const STARTUP_CHECK = true;
+
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  if (document.getElementById('adminPanel').style.display === 'block') {
+    sessionStorage.setItem('adminAuth', Date.now());
+    inactivityTimer = setTimeout(forceLogout, INACTIVITY_LIMIT);
+  }
+}
+
+function forceLogout() {
+  alert('Sesión expirada por inactividad.');
+  logout();
+}
+
+function checkSession() {
+  const auth = sessionStorage.getItem('adminAuth');
+  if (!auth) return false;
+  const elapsed = Date.now() - Number(auth);
+  if (elapsed > INACTIVITY_LIMIT) {
+    sessionStorage.removeItem('adminAuth');
+    return false;
+  }
+  return true;
+}
+
+const activityEvents = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart'];
 
 function escapeHtml(str) {
   if (typeof str !== 'string' && typeof str !== 'number') return '';
@@ -38,6 +67,9 @@ function authenticate() {
     loginAttempts = 0;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
+    sessionStorage.setItem('adminAuth', Date.now());
+    resetInactivityTimer();
+    activityEvents.forEach(ev => document.addEventListener(ev, resetInactivityTimer, { passive: true }));
     loadProjects();
   } else {
     loginAttempts++;
@@ -213,6 +245,9 @@ function resetDefaults() {
 }
 
 function logout() {
+  clearTimeout(inactivityTimer);
+  sessionStorage.removeItem('adminAuth');
+  activityEvents.forEach(ev => document.removeEventListener(ev, resetInactivityTimer));
   document.getElementById('adminPanel').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('adminPass').value = '';
@@ -220,5 +255,14 @@ function logout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('loginScreen').style.display = 'flex';
+  if (STARTUP_CHECK && checkSession()) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    sessionStorage.setItem('adminAuth', Date.now());
+    resetInactivityTimer();
+    activityEvents.forEach(ev => document.addEventListener(ev, resetInactivityTimer, { passive: true }));
+    loadProjects();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
 });
