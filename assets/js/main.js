@@ -369,8 +369,26 @@ document.addEventListener('DOMContentLoaded', () => {
         subjectEl.value = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
       }
 
+      let turnstileToken = null;
+      if (typeof turnstile !== 'undefined') {
+        turnstileToken = turnstile.getResponse();
+        if (!turnstileToken) {
+          turnstileToken = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
+        }
+        if (!turnstileToken) {
+          formStatus.textContent = 'Por favor completa la verificación de seguridad.';
+          formStatus.className = 'form-status error';
+          submitBtn.disabled = false;
+          submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
+          return;
+        }
+      }
+
       try {
         const formData = new FormData(form);
+        if (turnstileToken && !formData.has('cf-turnstile-response')) {
+          formData.set('cf-turnstile-response', turnstileToken);
+        }
         const res = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           body: formData
