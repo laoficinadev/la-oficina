@@ -68,6 +68,27 @@ document.addEventListener('DOMContentLoaded', () => {
     return DEFAULT_PROJECTS;
   }
 
+  function escapeHtml(str) {
+    if (typeof str !== 'string' && typeof str !== 'number') return '';
+    const d = document.createElement('div');
+    d.textContent = String(str);
+    return d.innerHTML;
+  }
+
+  function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') return '#';
+    url = url.trim();
+    try {
+      const parsed = new URL(url, window.location.origin);
+      const protocol = parsed.protocol.toLowerCase();
+      if (protocol === 'javascript:' || protocol === 'data:' || protocol === 'vbscript:') return '#';
+      return escapeHtml(url);
+    } catch {
+      if (url.startsWith('javascript:') || url.startsWith('data:') || url.startsWith('vbscript:')) return '#';
+      return escapeHtml(url);
+    }
+  }
+
   function renderProjects() {
     const grid = document.getElementById('projectsGrid');
     if (!grid) return;
@@ -78,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <article class="project-card reveal">
         <div class="project-image">
           ${p.image
-            ? `<img src="${p.image}" alt="${isEn && p.titleEn ? p.titleEn : p.title}" class="project-img" />`
+            ? `<img src="${sanitizeUrl(p.image)}" alt="${escapeHtml(isEn && p.titleEn ? p.titleEn : p.title)}" class="project-img" />`
             : `<div class="project-placeholder">
               <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="3"/>
@@ -91,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         </div>
         <div class="project-body">
-          <h3 class="project-title">${isEn && p.titleEn ? p.titleEn : p.title}</h3>
-          <p class="project-desc">${isEn && p.descEn ? p.descEn : p.desc}</p>
+          <h3 class="project-title">${escapeHtml(isEn && p.titleEn ? p.titleEn : p.title)}</h3>
+          <p class="project-desc">${escapeHtml(isEn && p.descEn ? p.descEn : p.desc)}</p>
           <div class="project-tech">
-            ${p.tech.map(t => `<span>${t}</span>`).join('')}
+            ${(p.tech || []).map(t => `<span>${escapeHtml(t)}</span>`).join('')}
           </div>
           <div class="project-links">
-            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn btn-sm">${isEn ? 'View project' : 'Ver proyecto'}</a>
+            <a href="${sanitizeUrl(p.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm">${isEn ? 'View project' : 'Ver proyecto'}</a>
           </div>
         </div>
       </article>

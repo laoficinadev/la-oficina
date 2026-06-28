@@ -5,9 +5,24 @@ let loginBlockedUntil = 0;
 let loginTimer = null;
 
 function escapeHtml(str) {
+  if (typeof str !== 'string' && typeof str !== 'number') return '';
   const d = document.createElement('div');
-  d.textContent = str;
+  d.textContent = String(str);
   return d.innerHTML;
+}
+
+function sanitizeUrl(url) {
+  if (!url || typeof url !== 'string') return '#';
+  url = url.trim();
+  try {
+    const parsed = new URL(url, window.location.origin);
+    const protocol = parsed.protocol.toLowerCase();
+    if (protocol === 'javascript:' || protocol === 'data:' || protocol === 'vbscript:') return '#';
+    return url;
+  } catch {
+    if (url.startsWith('javascript:') || url.startsWith('data:') || url.startsWith('vbscript:')) return '#';
+    return url;
+  }
 }
 
 function authenticate() {
@@ -127,7 +142,7 @@ function saveForm() {
   const desc = document.getElementById('projectDesc').value.trim();
   const descEn = document.getElementById('projectDescEn').value.trim();
   const tech = document.getElementById('projectTech').value.split(',').map(s => s.trim()).filter(Boolean);
-  const link = document.getElementById('projectLink').value.trim();
+    const link = sanitizeUrl(document.getElementById('projectLink').value.trim());
 
   if (!title || !desc) {
     alert('Título y descripción son obligatorios.');
