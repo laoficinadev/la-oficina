@@ -257,10 +257,9 @@ function logout() {
   clearTimeout(inactivityTimer);
   sessionStorage.removeItem('adminAuth');
   activityEvents.forEach(ev => document.removeEventListener(ev, resetInactivityTimer));
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminPass').value = '';
-  document.getElementById('loginError').textContent = '';
+  const url = new URL('/admin.html', window.location.origin);
+  url.searchParams.set('logout', '1');
+  window.location.href = url.href;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
