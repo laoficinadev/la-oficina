@@ -1,3 +1,10 @@
+const PROJECT_CATEGORIES = [
+  { id: 'all', label: { es: 'Todos', en: 'All' } },
+  { id: 'web', label: { es: 'Web', en: 'Web' } },
+  { id: 'app', label: { es: 'App', en: 'App' } },
+  { id: 'automation', label: { es: 'Automatización', en: 'Automation' } }
+];
+
 const DEFAULT_PROJECTS = [
   {
     id: 'proj-1',
@@ -8,7 +15,8 @@ const DEFAULT_PROJECTS = [
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Python'],
     link: '#',
     icon: 'play',
-    image: 'assets/img/reproductor.jpeg'
+    image: 'assets/img/reproductor.jpeg',
+    category: 'web'
   },
   {
     id: 'proj-3',
@@ -19,6 +27,7 @@ const DEFAULT_PROJECTS = [
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
     link: 'https://hamletsgonzalez-glitch.github.io/pagina-transporte-scorp/',
     icon: 'truck',
-    image: 'assets/img/viajes-camiones.png'
+    image: 'assets/img/viajes-camiones.png',
+    category: 'web'
   }
 ];

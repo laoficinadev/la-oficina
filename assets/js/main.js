@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const projects = getProjects();
     const isEn = currentLang === 'en';
 
-    grid.innerHTML = projects.map(p => `
-      <article class="project-card reveal">
+    grid.innerHTML = projects.map((p, i) => `
+      <article class="project-card reveal glass" data-category="${escapeHtml(p.category || 'web')}" style="transition-delay:${i * 0.1}s">
         <div class="project-image">
           ${p.image
             ? `<img src="${sanitizeUrl(p.image)}" alt="${escapeHtml(isEn && p.titleEn ? p.titleEn : p.title)}" class="project-img" />`
@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const newReveals = grid.querySelectorAll('.reveal:not(.visible)');
     newReveals.forEach(el => revealObserver.observe(el));
+    applyFilter(currentFilter);
   }
 
   // ---- NAVBAR SCROLL ----
@@ -136,6 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
+    }
+    const pBar = document.getElementById('progressBar');
+    if (pBar) {
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      pBar.style.width = total > 0 ? `${(window.pageYOffset / total) * 100}%` : '0%';
     }
   });
 
@@ -331,6 +338,109 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ---- TYPEWRITER ----
+  function runTypewriter(el) {
+    const text = el.textContent;
+    el.textContent = '';
+    el.style.visibility = 'visible';
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, 35 + Math.random() * 25);
+      }
+    }
+    type();
+  }
+
+  const typewriterEls = document.querySelectorAll('[data-typewriter]');
+  const typewriterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runTypewriter(entry.target);
+        typewriterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  typewriterEls.forEach(el => {
+    el.style.visibility = 'hidden';
+    typewriterObserver.observe(el);
+  });
+
+  // ---- STATS COUNTER ----
+  function animateCounter(el) {
+    const target = parseInt(el.getAttribute('data-target'), 10);
+    if (isNaN(target)) return;
+    const duration = 2000;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + (target === 100 ? '%' : '+');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const statNumbers = document.querySelectorAll('.stat-number');
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNumbers.forEach(el => statObserver.observe(el));
+
+  // ---- FAQ ACCORDION ----
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ---- PROJECTS FILTER ----
+  function renderFilter() {
+    const container = document.getElementById('projectsFilter');
+    if (!container) return;
+    const isEn = currentLang === 'en';
+    container.innerHTML = PROJECT_CATEGORIES.map(cat =>
+      `<button class="filter-btn${cat.id === 'all' ? ' active' : ''}" data-filter="${cat.id}">${cat.label[isEn ? 'en' : 'es']}</button>`
+    ).join('');
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilter(btn.getAttribute('data-filter'));
+      });
+    });
+  }
+
+  let currentFilter = 'all';
+
+  function applyFilter(filter) {
+    currentFilter = filter;
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    const cards = grid.querySelectorAll('.project-card');
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category');
+      if (filter === 'all' || cat === filter) {
+        card.style.display = '';
+        card.classList.add('visible');
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
   // ---- CONTACT FORM ----
   const form = document.getElementById('contactForm');
   const formStatus = document.getElementById('formStatus');
@@ -434,6 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ---- INIT ----
+  renderFilter();
   loadLang(currentLang);
   renderProjects();
 
