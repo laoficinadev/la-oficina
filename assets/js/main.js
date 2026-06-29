@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isEn = currentLang === 'en';
 
     grid.innerHTML = projects.map((p, i) => `
-      <article class="project-card reveal glass" data-category="${escapeHtml(p.category || 'web')}" style="transition-delay:${i * 0.1}s">
+      <article class="project-card reveal" data-category="${escapeHtml(p.category || 'web')}" style="transition-delay:${i * 0.1}s">
         <div class="project-image">
           ${p.image
             ? `<img src="${sanitizeUrl(p.image)}" alt="${escapeHtml(isEn && p.titleEn ? p.titleEn : p.title)}" class="project-img" />`
