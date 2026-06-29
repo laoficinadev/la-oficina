@@ -418,14 +418,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        const res = await fetch('https://automation-kit.tropicalesjw.workers.dev/api/leads', {
+        const res = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            client_slug: 'la-oficina',
+            access_key: '6c17403c-403f-4ff8-93a0-5740bfa93f1b',
             name,
             email,
-            phone: '',
             message
           })
         });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://ajax.googleapis.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://automation-kit.tropicalesjw.workers.dev https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; base-uri 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://ajax.googleapis.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; form-action https://api.web3forms.com; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; base-uri 'self';" />
   <title data-i18n="site.title">La Oficina — Desarrollo y Tecnología</title>
   <meta name="description" content="La Oficina — Desarrollo web, aplicaciones, automatización y soporte para empresas." />
   <meta property="og:title" content="La Oficina — Desarrollo y Tecnología" />
@@ -323,6 +323,8 @@
 
       <div class="contact-grid">
         <form class="contact-form reveal" id="contactForm">
+          <input type="hidden" name="access_key" value="6c17403c-403f-4ff8-93a0-5740bfa93f1b" />
+          <input type="hidden" name="subject" value="" />
           <div class="form-group">
             <label for="name" data-i18n="contact.form.name">Nombre</label>
             <input type="text" id="name" name="name" required data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre" />
