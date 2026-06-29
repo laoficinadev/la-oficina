@@ -40,7 +40,7 @@
   "contact.form.messagePlaceholder": "Tell us about your project...",
   "contact.form.submit": "Send message",
   "contact.form.sending": "Sending...",
-  "contact.form.success": "The message has been sent. Check your email to verify it.",
+  "contact.form.success": "Message sent! We'll get back to you within 24 hours.",
   "contact.form.error.required": "Please fill in all fields.",
   "contact.form.error.email": "Please enter a valid email.",
   "contact.email.label": "Email",

@@ -11,7 +11,6 @@
 }
 
 .hidden { display: none !important; }
-.turnstile-wrap { margin-bottom: 16px; }
 
 html {
   scroll-behavior: smooth;

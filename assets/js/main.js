@@ -364,44 +364,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const subjectEl = form.querySelector('[name="subject"]');
-      if (subjectEl) {
-        subjectEl.value = `${currentLang === 'en' ? 'Contact from La Oficina' : 'Contacto desde La Oficina'} - ${name}`;
-      }
-
-      let turnstileToken = null;
-      if (typeof turnstile !== 'undefined') {
-        turnstileToken = turnstile.getResponse();
-        if (!turnstileToken) {
-          turnstileToken = (form.querySelector('[name="cf-turnstile-response"]') || {}).value;
-        }
-        if (!turnstileToken) {
-          formStatus.textContent = 'Por favor completa la verificación de seguridad.';
-          formStatus.className = 'form-status error';
-          submitBtn.disabled = false;
-          submitBtn.textContent = langData['contact.form.submit'] || 'Enviar mensaje';
-          return;
-        }
-      }
-
       try {
-        const formData = new FormData(form);
-        if (turnstileToken && !formData.has('cf-turnstile-response')) {
-          formData.set('cf-turnstile-response', turnstileToken);
-        }
-        const res = await fetch('https://api.web3forms.com/submit', {
+        const res = await fetch('https://automation-kit.tropicalesjw.workers.dev/api/leads', {
           method: 'POST',
-          body: formData
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_slug: 'la-oficina',
+            name,
+            email,
+            phone: '',
+            message
+          })
         });
-        const data = await res.json();
 
-        if (data.success) {
+        if (res.ok) {
           const msg = langData['contact.form.success'] || (currentLang === 'en' ? 'The message has been sent. Check your email to verify it.' : 'Se ha enviado el mensaje. Revisa tu correo electrónico para verificarlo.');
           document.getElementById('modalMessage').textContent = msg;
           document.getElementById('modalOverlay').classList.add('active');
           form.reset();
         } else {
-          formStatus.textContent = data.message || 'Error al enviar el mensaje.';
+          formStatus.textContent = 'Error al enviar el mensaje.';
           formStatus.className = 'form-status error';
         }
       } catch (err) {

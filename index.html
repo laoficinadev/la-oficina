@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://ajax.googleapis.com https://challenges.cloudflare.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src https://challenges.cloudflare.com; form-action https://api.web3forms.com; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; base-uri 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://ajax.googleapis.com 'nonce-YjFmNjEwM2U1'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://automation-kit.tropicalesjw.workers.dev https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net; base-uri 'self';" />
   <title data-i18n="site.title">La Oficina — Desarrollo y Tecnología</title>
   <meta name="description" content="La Oficina — Desarrollo web, aplicaciones, automatización y soporte para empresas." />
   <meta property="og:title" content="La Oficina — Desarrollo y Tecnología" />
@@ -26,7 +26,6 @@
     gtag('js', new Date());
     gtag('config', 'G-KK5NLVJHXP');
   </script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" integrity="sha384-5XIpEyb2LdqwaaewbatlnkneU2uQPYFXoWK/Wx68uzQyMLk82xWd2aSJGIF/0dSN" crossorigin="anonymous" async defer></script>
 </head>
 <body>
 
@@ -273,10 +272,7 @@
       </div>
 
       <div class="contact-grid">
-        <form class="contact-form reveal" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="6c17403c-403f-4ff8-93a0-5740bfa93f1b" />
-          <input type="hidden" name="subject" value="" />
-          <input type="checkbox" name="botcheck" class="hidden" />
+        <form class="contact-form reveal" id="contactForm">
           <div class="form-group">
             <label for="name" data-i18n="contact.form.name">Nombre</label>
             <input type="text" id="name" name="name" required data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre" />
@@ -289,7 +285,6 @@
             <label for="message" data-i18n="contact.form.message">Mensaje</label>
             <textarea id="message" name="message" rows="5" required data-i18n-placeholder="contact.form.messagePlaceholder" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
           </div>
-          <div class="cf-turnstile turnstile-wrap" data-sitekey="0x4AAAAAADscb0n8tccfk1FL" data-theme="dark" data-size="flexible"></div>
           <button type="submit" class="btn btn-primary btn-full" id="submitBtn" data-i18n="contact.form.submit">
             Enviar mensaje
           </button>
