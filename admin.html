@@ -85,6 +85,15 @@
     .admin-import input[type="file"] { display: none; }
     .admin-header-inset { margin: -24px -24px 24px; border-radius: 0; }
     label.btn-admin { cursor: pointer; }
+    .audit-toggle { margin-top: 16px; font-size: 0.75rem; color: #555; }
+    .audit-toggle:hover { color: #888; }
+    .audit-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .audit-table th { text-align: left; padding: 8px 12px; background: #1a1a1a; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #222; }
+    .audit-table td { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; color: #aaa; }
+    .audit-table tr:hover td { background: #1a1a1a; }
+    #auditLogSection { display: none; background: #111; border: 1px solid #222; border-radius: 14px; overflow: hidden; margin-top: 16px; }
+    .audit-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid #222; }
+    .audit-header h3 { font-size: 0.85rem; color: #8BC34A; }
   </style>
 </head>
 <body>
@@ -125,6 +134,7 @@
         <input type="file" accept=".json" id="importFile" />
       </label>
       <button class="btn-admin btn-danger-admin" id="resetBtn">Restaurar defaults</button>
+      <button class="btn-admin btn-secondary-admin" id="auditBtn" style="margin-left:auto;">Registro de actividad</button>
     </div>
 
     <div id="formSection">
@@ -163,6 +173,14 @@
 
     <div class="admin-projects-list" id="projectsList">
       <div class="admin-empty">Cargando...</div>
+    </div>
+
+    <div id="auditLogSection">
+      <div class="audit-header">
+        <h3>Registro de actividad</h3>
+        <button class="btn-admin btn-sm btn-secondary-admin" id="clearAuditBtn">Limpiar</button>
+      </div>
+      <div id="auditLogContent"></div>
     </div>
   </div>
 

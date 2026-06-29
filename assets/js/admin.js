@@ -8,9 +8,17 @@ function hashPass(pass) {
   });
 }
 let editingId = null;
-let loginAttempts = 0;
-let loginBlockedUntil = 0;
 let loginTimer = null;
+
+function getLoginState() {
+  try {
+    return JSON.parse(localStorage.getItem('loginState')) || { attempts: 0, blockedUntil: 0 };
+  } catch { return { attempts: 0, blockedUntil: 0 }; }
+}
+
+function saveLoginState(s) {
+  localStorage.setItem('loginState', JSON.stringify(s));
+}
 let inactivityTimer = null;
 const INACTIVITY_LIMIT = 15 * 60 * 1000;
 const STARTUP_CHECK = true;
@@ -62,10 +70,44 @@ function sanitizeUrl(url) {
   }
 }
 
+function auditLog(action, detail) {
+  try {
+    const logs = JSON.parse(localStorage.getItem('auditLog') || '[]');
+    logs.push({ action, detail, time: new Date().toISOString() });
+    while (logs.length > 200) logs.shift();
+    localStorage.setItem('auditLog', JSON.stringify(logs));
+  } catch {}
+}
+
+function getAuditLog() {
+  try {
+    return JSON.parse(localStorage.getItem('auditLog') || '[]');
+  } catch { return []; }
+}
+
+function clearAuditLog() {
+  if (!confirm('¿Borrar todo el registro de actividad?')) return;
+  localStorage.removeItem('auditLog');
+  renderAuditLog();
+}
+
+function renderAuditLog() {
+  const container = document.getElementById('auditLogContent');
+  const logs = getAuditLog();
+  if (logs.length === 0) {
+    container.innerHTML = '<div class="admin-empty">Sin actividad registrada.</div>';
+    return;
+  }
+  container.innerHTML = '<table class="audit-table"><thead><tr><th>Fecha</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>' +
+    logs.slice().reverse().map(l => `<tr><td>${escapeHtml(new Date(l.time).toLocaleString())}</td><td>${escapeHtml(l.action)}</td><td>${escapeHtml(l.detail)}</td></tr>`).join('') +
+    '</tbody></table>';
+}
+
 async function authenticate() {
+  const state = getLoginState();
   const now = Date.now();
-  if (now < loginBlockedUntil) {
-    const secs = Math.ceil((loginBlockedUntil - now) / 1000);
+  if (now < state.blockedUntil) {
+    const secs = Math.ceil((state.blockedUntil - now) / 1000);
     document.getElementById('loginError').textContent = `Demasiados intentos. Espera ${secs} segundos.`;
     return;
   }
@@ -73,7 +115,8 @@ async function authenticate() {
   const pass = document.getElementById('adminPass').value;
   const inputHash = await hashPass(pass);
   if (inputHash === ADMIN_HASH) {
-    loginAttempts = 0;
+    saveLoginState({ attempts: 0, blockedUntil: 0 });
+    auditLog('login', 'Inicio de sesión exitoso');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     sessionStorage.setItem('adminAuth', Date.now());
@@ -81,17 +124,20 @@ async function authenticate() {
     activityEvents.forEach(ev => document.addEventListener(ev, resetInactivityTimer, { passive: true }));
     loadProjects();
   } else {
-    loginAttempts++;
+    state.attempts++;
+    auditLog('login_fail', `Intento fallido #${state.attempts}`);
     document.getElementById('loginError').textContent = 'Contraseña incorrecta';
-    if (loginAttempts >= 3) {
-      loginBlockedUntil = Date.now() + 30000;
-      loginAttempts = 0;
+    if (state.attempts >= 3) {
+      const delay = Math.min(30 * Math.pow(2, state.attempts - 3), 1800) * 1000;
+      state.blockedUntil = now + delay;
+      state.attempts = 0;
+      saveLoginState(state);
       const inp = document.getElementById('adminPass');
       inp.disabled = true;
-      const btn = document.querySelector('.login-box button');
+      const btn = document.getElementById('loginBtn');
       btn.disabled = true;
       loginTimer = setInterval(() => {
-        const rem = Math.ceil((loginBlockedUntil - Date.now()) / 1000);
+        const rem = Math.ceil((state.blockedUntil - Date.now()) / 1000);
         if (rem <= 0) {
           clearInterval(loginTimer);
           inp.disabled = false;
@@ -101,6 +147,8 @@ async function authenticate() {
           document.getElementById('loginError').textContent = `Demasiados intentos. Espera ${rem} segundos.`;
         }
       }, 500);
+    } else {
+      saveLoginState(state);
     }
   }
 }
@@ -157,6 +205,7 @@ function moveProject(idx, dir) {
   if (target < 0 || target >= projects.length) return;
   [projects[idx], projects[target]] = [projects[target], projects[idx]];
   saveProjects();
+  auditLog('reorder', `Proyecto movido de posición ${idx + 1} a ${target + 1}`);
 }
 
 function showForm(p) {
@@ -195,9 +244,11 @@ function saveForm() {
     if (idx !== -1) {
       projects[idx] = { ...projects[idx], title, titleEn, desc, descEn, tech, link };
     }
+    auditLog('edit', `Proyecto editado: "${title}"`);
   } else {
     const id = 'proj-' + Date.now();
     projects.push({ id, title, titleEn, desc, descEn, tech, link, icon: 'play' });
+    auditLog('create', `Proyecto creado: "${title}"`);
   }
 
   saveProjects();
@@ -211,8 +262,10 @@ function editProject(id) {
 
 function deleteProject(id) {
   if (!confirm('¿Eliminar este proyecto?')) return;
-  projects = projects.filter(p => p.id !== id);
+  const p = projects.find(proj => proj.id === id);
+  projects = projects.filter(proj => proj.id !== id);
   saveProjects();
+  if (p) auditLog('delete', `Proyecto eliminado: "${p.title}"`);
 }
 
 function exportProjects() {
@@ -224,6 +277,7 @@ function exportProjects() {
   a.download = 'proyectos.json';
   a.click();
   URL.revokeObjectURL(url);
+  auditLog('export', `Exportados ${projects.length} proyectos`);
 }
 
 function importProjects() {
@@ -238,6 +292,7 @@ function importProjects() {
       if (!confirm(`¿Importar ${data.length} proyectos? Esto reemplazará los actuales.`)) return;
       projects = data;
       saveProjects();
+      auditLog('import', `Importados ${data.length} proyectos`);
       alert('Proyectos importados correctamente.');
     } catch (err) {
       alert('Error al importar: formato de archivo inválido.');
@@ -250,12 +305,14 @@ function importProjects() {
 function resetDefaults() {
   if (!confirm('¿Restaurar proyectos por defecto? Se perderán los cambios actuales.')) return;
   localStorage.removeItem('projects');
+  auditLog('reset', 'Proyectos restaurados a defaults');
   loadProjects();
 }
 
 function logout() {
   clearTimeout(inactivityTimer);
   sessionStorage.removeItem('adminAuth');
+  auditLog('logout', 'Cierre de sesión');
   activityEvents.forEach(ev => document.removeEventListener(ev, resetInactivityTimer));
   const url = new URL('/admin.html', window.location.origin);
   url.searchParams.set('logout', '1');
@@ -283,6 +340,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('saveBtn').addEventListener('click', saveForm);
   document.getElementById('cancelBtn').addEventListener('click', cancelForm);
   document.getElementById('importFile').addEventListener('change', importProjects);
+  document.getElementById('auditBtn').addEventListener('click', () => {
+    const section = document.getElementById('auditLogSection');
+    if (section.style.display === 'block') {
+      section.style.display = 'none';
+    } else {
+      section.style.display = 'block';
+      renderAuditLog();
+    }
+  });
+  document.getElementById('clearAuditBtn').addEventListener('click', clearAuditLog);
 
   if (window.__workerAuth) {
     document.getElementById('loginScreen').style.display = 'none';
