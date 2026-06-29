@@ -245,46 +245,6 @@ ul { list-style: none; }
   to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-/* ---- STATS ---- */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 36px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: var(--transition);
-}
-
-.stat-card:hover {
-  border-color: rgba(139, 195, 74, 0.2);
-  transform: translateY(-6px);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-}
-
-.stat-number {
-  display: block;
-  font-size: 3rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--verde), var(--azul));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.1;
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-size: 0.88rem;
-  color: var(--gris-400);
-  line-height: 1.5;
-}
-
 /* ---- PROJECTS FILTER ---- */
 .projects-filter {
   display: flex;
@@ -1538,14 +1498,6 @@ ul { list-style: none; }
     padding: 28px 20px;
   }
 
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .stat-number {
-    font-size: 2.2rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1557,14 +1509,6 @@ ul { list-style: none; }
     padding: 24px;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .stat-number {
-    font-size: 1.8rem;
-  }
 }
 
 /* ---- STAGGER REVEAL ---- */

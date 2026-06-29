@@ -338,33 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---- STATS COUNTER ----
-  function animateCounter(el) {
-    const target = parseInt(el.getAttribute('data-target'), 10);
-    if (isNaN(target)) return;
-    const duration = 2000;
-    const start = performance.now();
-    function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target) + (target === 100 ? '%' : '+');
-      if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
-  }
-
-  const statNumbers = document.querySelectorAll('.stat-number');
-  const statObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        statObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  statNumbers.forEach(el => statObserver.observe(el));
-
   // ---- FAQ ACCORDION ----
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
