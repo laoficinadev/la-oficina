@@ -195,6 +195,7 @@ ul { list-style: none; }
 @media (max-width: 768px) {
   .nav-action-label {
     display: none;
+  }
 }
 
 /* ---- PROGRESS BAR ---- */
