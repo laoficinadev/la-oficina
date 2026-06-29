@@ -338,36 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---- TYPEWRITER ----
-  function runTypewriter(el) {
-    const text = el.textContent;
-    el.textContent = '';
-    el.style.visibility = 'visible';
-    let i = 0;
-    function type() {
-      if (i < text.length) {
-        el.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, 35 + Math.random() * 25);
-      }
-    }
-    type();
-  }
-
-  const typewriterEls = document.querySelectorAll('[data-typewriter]');
-  const typewriterObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        runTypewriter(entry.target);
-        typewriterObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  typewriterEls.forEach(el => {
-    el.style.visibility = 'hidden';
-    typewriterObserver.observe(el);
-  });
-
   // ---- STATS COUNTER ----
   function animateCounter(el) {
     const target = parseInt(el.getAttribute('data-target'), 10);

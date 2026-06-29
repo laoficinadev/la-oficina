@@ -1566,18 +1566,6 @@ ul { list-style: none; }
   }
 }
 
-/* ---- TYPEWRITER ---- */
-.typewriter {
-  overflow: hidden;
-  border-right: 2px solid var(--verde);
-  white-space: normal;
-  animation: blinkCursor 0.8s step-end infinite;
-}
-
-@keyframes blinkCursor {
-  50% { border-color: transparent; }
-}
-
 /* ---- GLASSMORPHISM ---- */
 .glass {
   background: rgba(255,255,255,0.03);
